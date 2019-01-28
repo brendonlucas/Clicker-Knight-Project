@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android" android:oneshot="false">
+    <item android:drawable="@drawable/frameboss1" android:duration="80"></item>
+    <item android:drawable="@drawable/frameboss2" android:duration="80"></item>
+    <item android:drawable="@drawable/frameboss3" android:duration="80"></item>
+    <item android:drawable="@drawable/frameboss4" android:duration="80"></item>
+    <item android:drawable="@drawable/frameboss5" android:duration="80"></item>
+    <item android:drawable="@drawable/frameboss6" android:duration="80"></item>
+
+</animation-list>

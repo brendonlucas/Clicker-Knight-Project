@@ -1,0 +1,156 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:406798830673119793",
+      "lastPropertyId": "6:4146108619792654915",
+      "name": "Usuario",
+      "properties": [
+        {
+          "id": "1:163309779037457252",
+          "name": "id"
+        },
+        {
+          "id": "2:5977340702174339060",
+          "name": "nome"
+        },
+        {
+          "id": "3:7810120477210341810",
+          "name": "senha"
+        },
+        {
+          "id": "4:8934949151236144990",
+          "name": "nun_id"
+        },
+        {
+          "id": "6:4146108619792654915",
+          "name": "logado"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:2398704966591594819",
+      "lastPropertyId": "2:5904514956170415781",
+      "name": "UsuarioLogado",
+      "properties": [
+        {
+          "id": "1:786217815778806396",
+          "name": "id"
+        },
+        {
+          "id": "2:5904514956170415781",
+          "name": "nun_id"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "4:2789589106411593874",
+      "lastPropertyId": "5:1820047670481942058",
+      "name": "Upgrade",
+      "properties": [
+        {
+          "id": "1:8919231574611243093",
+          "name": "id"
+        },
+        {
+          "id": "2:8177502801064830402",
+          "name": "nome"
+        },
+        {
+          "id": "3:815698719855967881",
+          "name": "valor"
+        },
+        {
+          "id": "4:5541894320780037738",
+          "name": "num_id"
+        },
+        {
+          "id": "5:1820047670481942058",
+          "name": "melhoria"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "5:3360496237804377235",
+      "lastPropertyId": "6:9837678030876017",
+      "name": "Personagem",
+      "properties": [
+        {
+          "id": "1:205094242909167896",
+          "name": "id"
+        },
+        {
+          "id": "2:4409593659119155281",
+          "name": "nome"
+        },
+        {
+          "id": "3:74147235858768141",
+          "name": "gold"
+        },
+        {
+          "id": "4:3732656641749127610",
+          "name": "poderClique"
+        },
+        {
+          "id": "5:585010783519078119",
+          "name": "personagemFinalizado"
+        },
+        {
+          "id": "6:9837678030876017",
+          "name": "num_Id"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "6:410214276416690456",
+      "lastPropertyId": "4:4276190619462718939",
+      "name": "Boss",
+      "properties": [
+        {
+          "id": "1:8644666053230162388",
+          "name": "id"
+        },
+        {
+          "id": "2:3359592979253693393",
+          "name": "nome"
+        },
+        {
+          "id": "3:4181721980939534271",
+          "name": "vida"
+        },
+        {
+          "id": "4:4276190619462718939",
+          "name": "num_Id"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "6:410214276416690456",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [
+    7739550549749987001
+  ],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [
+    4031884917737746212,
+    9159178023311757651,
+    4334295982968921316,
+    5804826921267607733,
+    4061525169053913803,
+    1987723732628282210,
+    8696666004738312291
+  ],
+  "retiredRelationUids": [],
+  "version": 1
+}
