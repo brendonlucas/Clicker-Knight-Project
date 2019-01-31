@@ -1,14 +1,12 @@
 package com.example.brendon.sistemadelogin;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -23,13 +21,14 @@ import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
+import com.example.brendon.sistemadelogin.Pops.PopStatus;
 import com.example.brendon.sistemadelogin.Telas_login.LoginActivity;
-
 import com.example.brendon.sistemadelogin.Models.Usuario;
 import com.example.brendon.sistemadelogin.dal.App;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import io.objectbox.Box;
 
@@ -43,12 +42,11 @@ public class InicioActivity extends AppCompatActivity {
 
     MediaPlayer music_fundo;
     AlertDialog dialog;
-    TextView txt_hp_Boss, txt_gold;
+    TextView txt_hp_Boss, txt_gold, txt_gold_clique, txt_dano, txt_nome_hero;
     ImageView image_hero, image_hit, image_boss;
-    AnimationDrawable anima;
     RecyclerView recicleUpgrads;
-    List<Usuario> dadosUserlogado ;
-    AnimationDrawable animaHero,animeBoss,animaHit;
+    Button botaoBook, botaoBau;
+    AnimationDrawable animaHero,animeBoss,animaHit, animaBook, animaBau;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +69,9 @@ public class InicioActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
     public void setAtributosAdicionais(){
 
-        verificaUserLogado();
+        //verificaUserLogado();
         music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
         music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -87,15 +81,14 @@ public class InicioActivity extends AppCompatActivity {
         });
         music_fundo.start();
 
-
         recicleUpgrads = findViewById(R.id.recyclerUpgrads);
         image_hero = findViewById(R.id.Hero);
         image_boss = findViewById(R.id.image_Boss);
         image_hit = findViewById(R.id.hit_boss);
+        botaoBook = findViewById(R.id.buttonStatus);
+        botaoBau = findViewById(R.id.bonus_blood_coins);
         txt_hp_Boss = findViewById(R.id.txt_hp_boss);
         txt_gold = findViewById(R.id.txt_gold);
-
-
 
         image_hero.setBackgroundResource(R.drawable.sequencia_ataque);
         animaHero = (AnimationDrawable)image_hero.getBackground();
@@ -104,6 +97,10 @@ public class InicioActivity extends AppCompatActivity {
         image_hit.setBackgroundResource(R.drawable.sequencia_hit);
         animaHit = (AnimationDrawable)image_hit.getBackground();
         animaHit.start();
+
+        botaoBook.setBackgroundResource(R.drawable.animate_book);
+        animaBook = (AnimationDrawable)botaoBook.getBackground();
+        animaBook.start();
 
         image_boss.setBackgroundResource(R.drawable.sequencia_boss);
         animeBoss = (AnimationDrawable)image_boss.getBackground();
@@ -120,9 +117,8 @@ public class InicioActivity extends AppCompatActivity {
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
         txt_hp_Boss.setText("" + boxBoss.getAll().get(idUserLogado - 1).getVida());
         txt_gold.setText("" + boxPersonagens.getAll().get(idUserLogado - 1).getGold());
-
     }
-
+/*
     public boolean verificaUserLogado(){
         Toast.makeText(this, "achou", Toast.LENGTH_SHORT).show();
         for (int i = 0; i< boxUsuarios.count(); i++ ){
@@ -134,7 +130,7 @@ public class InicioActivity extends AppCompatActivity {
             }
         }
         return false;
-    }
+    }*/
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,7 +139,7 @@ public class InicioActivity extends AppCompatActivity {
                 setAtributosAdicionais();
 
             }else{
-                if (!verificaUserLogado()){
+                if (boxDadosUserLogado.count() == 0){
                     finish();
                 }
             }
@@ -151,9 +147,20 @@ public class InicioActivity extends AppCompatActivity {
     }
 
 
+
     @SuppressLint("SetTextI18n")
     public void atacar(View view) {
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+
+        Random geradorNum = new Random();
+        //0.2% de chance
+        int numero = geradorNum.nextInt(501);
+        if (verificaChanceBonus(numero)){
+            botaoBau.setVisibility(View.VISIBLE);
+            botaoBau.setBackgroundResource(R.drawable.animate_bau);
+            animaBau = (AnimationDrawable)botaoBau.getBackground();
+            animaBau.start();
+        }
 
         animaHero.stop();
         image_hero.setBackgroundResource(R.drawable.sequencia_ataque);
@@ -162,8 +169,6 @@ public class InicioActivity extends AppCompatActivity {
         animaHit.stop();
         image_hit.setBackgroundResource(R.drawable.sequencia_hit);
         animaHit.start();
-
-
 
         int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
         int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
@@ -193,13 +198,22 @@ public class InicioActivity extends AppCompatActivity {
         mp.start();
     }
 
+    public boolean verificaChanceBonus(int numero){
+        int[] chances =  new int[] {1};
+        for(int i =0; i<chances.length; i++){
+            if(numero == chances[i]){
+                return true;
+            }
+        }
+        return false;
+    }
     public void sairDaConta(View view) {
         music_fundo.stop();
         boxDadosUserLogado.removeAll();
-        setaUserDeslogado();
+        //setaUserDeslogado();
         finish();
     }
-
+/*
     public void setaUserDeslogado(){
         for (int i = 1; i<= boxUsuarios.getAll().size(); i++){
             boolean userStatus = boxUsuarios.getAll().get(i - 1).isLogado();
@@ -210,7 +224,7 @@ public class InicioActivity extends AppCompatActivity {
                 break;
             }
         }
-    }
+    }*/
 
     public List<Upgrade> setUpsDisponiveis(){
         int idUserlogado = boxDadosUserLogado.getAll().get(0).getNun_id();
@@ -225,14 +239,8 @@ public class InicioActivity extends AppCompatActivity {
         return listaUpsUserAtual;
     }
 
-    public void qtd_ups(View view) {
-        int qtd = setUpsDisponiveis().size();
-        Toast.makeText(this, ""+ qtd, Toast.LENGTH_SHORT).show();
-    }
-
-    public void sair(View view) {
-        dialog = new AlertDialog.Builder(this).setView(R.layout.card_alert).show();
-
+    public void deslogar(View view) {
+        dialog = new AlertDialog.Builder(this).setView(R.layout.card_alert_deslogar).show();
     }
 
     public void cancelaSaida(View v){
@@ -248,5 +256,25 @@ public class InicioActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         dialog = new AlertDialog.Builder(this).setView(R.layout.card_alert).show();
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void verStatus(View view) {
+        startActivity(new Intent(this,PopStatus.class));
+
+    }
+
+    public void recebeBonus(View view) {
+        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+        int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
+        int goldComBonus = goldAtualPersonagem * 2;
+
+        Personagem personagem = boxPersonagens.get(idUserLogado);
+        personagem.setGold(goldComBonus);
+        boxPersonagens.put(personagem);
+        setValores();
+        botaoBau.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, "Bônus recebido!", Toast.LENGTH_SHORT).show();
+
     }
 }

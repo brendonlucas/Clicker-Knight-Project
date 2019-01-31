@@ -9,16 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
-import com.example.brendon.sistemadelogin.Models.Usuario;
 import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.objectbox.Box;
@@ -52,8 +51,10 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
     @Override
     public void onBindViewHolder(@NonNull final UpgradsViewHolder holder, final int position) {
         final Upgrade upAtual = this.upgradeListDisponiveis.get(position);
+        int valorParaComparacao = upAtual.getValor();
         holder.txtNome.setText(upAtual.getNome());
         holder.txtvalor.setText(""+ upAtual.getValor());
+        setImageInUp(holder, valorParaComparacao);
 
         holder.txtvalor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +83,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
 
                     boxUpgrads.remove(upAtual);
                     upgradeListDisponiveis.remove(position);
+
                     notifyItemRemoved(position);
                     notifyItemRangeRemoved(position, getItemCount());
 
@@ -97,15 +99,49 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
         return upgradeListDisponiveis.size();
     }
 
+    private void setImageInUp(final UpgradsViewHolder holder, int valor){
+        if(valor == 100) {
+            holder.imageUp.setImageResource(R.drawable.forca1);
+        }else if(valor == 700) {
+            holder.imageUp.setImageResource(R.drawable.forca2);
+        }else if(valor == 1900) {
+            holder.imageUp.setImageResource(R.drawable.forca1);
+        }else if(valor == 3500) {
+            holder.imageUp.setImageResource(R.drawable.arma1);
+        }else if(valor == 10000) {
+            holder.imageUp.setImageResource(R.drawable.arma2);
+        }else if(valor == 25000) {
+            holder.imageUp.setImageResource(R.drawable.arma3);
+        }else if(valor == 43300) {
+            holder.imageUp.setImageResource(R.drawable.arma4);
+        }else if(valor == 70000) {
+            holder.imageUp.setImageResource(R.drawable.forca1);
+        }else if(valor == 100000) {
+            holder.imageUp.setImageResource(R.drawable.forca3);
+        }else if(valor == 260000) {
+            holder.imageUp.setImageResource(R.drawable.forca4);
+        }else if(valor == 600000) {
+            holder.imageUp.setImageResource(R.drawable.forca4);
+        }else if(valor == 999999) {
+            holder.imageUp.setImageResource(R.drawable.forca5);
+        }else if(valor == 2700000) {
+            holder.imageUp.setImageResource(R.drawable.arma5);
+        }else if(valor == 4400000) {
+            holder.imageUp.setImageResource(R.drawable.forca6);
+        }
 
-    public class UpgradsViewHolder extends RecyclerView.ViewHolder {
+    }
+
+    class UpgradsViewHolder extends RecyclerView.ViewHolder {
         TextView txtNome;
         Button txtvalor;
+        ImageView imageUp;
 
         public UpgradsViewHolder(View view) {
             super(view);
             txtNome = view.findViewById(R.id.Nome_ups);
             txtvalor = view.findViewById(R.id.valor);
+            imageUp = view.findViewById(R.id.icon_ups);
 
         }
     }

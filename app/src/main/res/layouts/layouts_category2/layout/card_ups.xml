@@ -41,20 +41,19 @@
             android:text="Nome Upgrade"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/valor"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/icon_ups"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="42dp"
-            android:layout_height="47dp"
+            android:id="@+id/icon_ups"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="13dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_ups" />
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
