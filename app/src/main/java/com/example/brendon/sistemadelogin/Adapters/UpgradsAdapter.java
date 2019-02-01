@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,12 +31,14 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
     Box<Personagem> boxPersonagem;
     Box<UsuarioLogado> boxDadosUserLogado;
     List<Upgrade> upgradeListDisponiveis;
+    TextView txt_info_sem_gold;
 
-    public UpgradsAdapter(Context context, Box<Personagem> boxPersonagem,Box<UsuarioLogado> boxDadosUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis) {
+    public UpgradsAdapter(Context context,TextView txt_info_sem_gold, Box<Personagem> boxPersonagem,Box<UsuarioLogado> boxDadosUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis) {
         this.boxUpgrads = boxUpgrads;
         this.boxPersonagem = boxPersonagem;
         this.boxDadosUserLogado = boxDadosUserLogado;
         this.upgradeListDisponiveis = upgradeListDisponiveis;
+        this.txt_info_sem_gold = txt_info_sem_gold;
         this.context = context;
     }
 
@@ -62,6 +66,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                 int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
                 int goldAtual = boxPersonagem.getAll().get(idUserLogado - 1).getGold();
                 int valorUp = upAtual.getValor();
+
                 if (goldAtual >= valorUp){
                     MediaPlayer mp = MediaPlayer.create(context, R.raw.level_up);
                     mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -88,7 +93,10 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                     notifyItemRangeRemoved(position, getItemCount());
 
                 }else{
-                    Toast.makeText(context, "Blood Coins insuficiente", Toast.LENGTH_LONG).show();
+                    Animation anima_texto = new TranslateAnimation(0,0,0,-100);
+                    anima_texto.setDuration(1500);
+                    txt_info_sem_gold.startAnimation(anima_texto);
+
                 }
             }
         });
@@ -139,6 +147,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
 
         public UpgradsViewHolder(View view) {
             super(view);
+
             txtNome = view.findViewById(R.id.Nome_ups);
             txtvalor = view.findViewById(R.id.valor);
             imageUp = view.findViewById(R.id.icon_ups);

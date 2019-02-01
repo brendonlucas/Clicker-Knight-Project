@@ -60,18 +60,18 @@ public class CadastroActivity extends AppCompatActivity {
     private void setUpgrads(int id){
         boxUpgrads.put(new Upgrade(id,"Força +1: Dano x2",100,2));
         boxUpgrads.put(new Upgrade(id,"Força +2: Dano x2",700,2));
-        boxUpgrads.put(new Upgrade(id,"Eleva a destreza: Dano x2",1900,2));
+        boxUpgrads.put(new Upgrade(id,"Destreza +1: Dano x2",1900,2));
         boxUpgrads.put(new Upgrade(id,"Espada nivel 1: Dano x2",3500,2));
         boxUpgrads.put(new Upgrade(id,"Espada nivel 2: Dano x3",10000,3));
         boxUpgrads.put(new Upgrade(id,"Espada nivel 3: Dano x3",25000,3));
         boxUpgrads.put(new Upgrade(id,"Espada nivel 4: Dano x3",43300,3));
-        boxUpgrads.put(new Upgrade(id,"Fortifica Armadura: Dano x4",70000,4));
-        boxUpgrads.put(new Upgrade(id,"Força +3: Dano x4",100000,4));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x4",260000,4));
-        boxUpgrads.put(new Upgrade(id,"Força +4: Dano x5",600000,5));
-        boxUpgrads.put(new Upgrade(id,"Força +5: Dano x6",999999,6));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x6",2700000,6));
-        boxUpgrads.put(new Upgrade(id,"Força +6: Dano x7",4400000,7));
+        boxUpgrads.put(new Upgrade(id,"Fortifica Armadura: Dano x2",70000,2));
+        boxUpgrads.put(new Upgrade(id,"Força +3: Dano x2",100000,2));
+        boxUpgrads.put(new Upgrade(id,"Destreza +2: Dano x2",260000,2));
+        boxUpgrads.put(new Upgrade(id,"Força +4: Dano x2",600000,2));
+        boxUpgrads.put(new Upgrade(id,"Força +5: Dano x2",999999,2));
+        boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x3",2700000,3));
+        boxUpgrads.put(new Upgrade(id,"Força +6: Dano x3",4400000,3));
     }
 
     public boolean encontrou(String nomeUsuario) {

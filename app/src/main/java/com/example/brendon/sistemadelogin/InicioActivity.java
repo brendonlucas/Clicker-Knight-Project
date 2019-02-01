@@ -7,6 +7,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -42,7 +44,7 @@ public class InicioActivity extends AppCompatActivity {
 
     MediaPlayer music_fundo;
     AlertDialog dialog;
-    TextView txt_hp_Boss, txt_gold, txt_gold_clique, txt_dano, txt_nome_hero;
+    TextView txt_hp_Boss, txt_gold, txt_gold_clique, txt_dano, txt_dano_exibido, txt_info_sem_gold;
     ImageView image_hero, image_hit, image_boss;
     RecyclerView recicleUpgrads;
     Button botaoBook, botaoBau;
@@ -77,9 +79,11 @@ public class InicioActivity extends AppCompatActivity {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 mp.start();
+
             }
         });
         music_fundo.start();
+
 
         recicleUpgrads = findViewById(R.id.recyclerUpgrads);
         image_hero = findViewById(R.id.Hero);
@@ -89,6 +93,9 @@ public class InicioActivity extends AppCompatActivity {
         botaoBau = findViewById(R.id.bonus_blood_coins);
         txt_hp_Boss = findViewById(R.id.txt_hp_boss);
         txt_gold = findViewById(R.id.txt_gold);
+        txt_dano_exibido = findViewById(R.id.mostra_hit);
+        txt_info_sem_gold = findViewById(R.id.txt_blood_coins_insuficientes);
+
 
         image_hero.setBackgroundResource(R.drawable.sequencia_ataque);
         animaHero = (AnimationDrawable)image_hero.getBackground();
@@ -108,7 +115,7 @@ public class InicioActivity extends AppCompatActivity {
 
         setUpsDisponiveis();
         setValores();
-        UpgradsAdapter adapter = new UpgradsAdapter(this, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis());
+        UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis());
         recicleUpgrads.setAdapter(adapter);
         recicleUpgrads.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -118,19 +125,6 @@ public class InicioActivity extends AppCompatActivity {
         txt_hp_Boss.setText("" + boxBoss.getAll().get(idUserLogado - 1).getVida());
         txt_gold.setText("" + boxPersonagens.getAll().get(idUserLogado - 1).getGold());
     }
-/*
-    public boolean verificaUserLogado(){
-        Toast.makeText(this, "achou", Toast.LENGTH_SHORT).show();
-        for (int i = 0; i< boxUsuarios.count(); i++ ){
-            Usuario userAtualVerificado = boxUsuarios.getAll().get(i);
-            boolean statusDoUsuario = userAtualVerificado.isLogado();
-            if (statusDoUsuario){
-                Toast.makeText(this, "achou", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        }
-        return false;
-    }*/
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -145,8 +139,6 @@ public class InicioActivity extends AppCompatActivity {
             }
         }
     }
-
-
 
     @SuppressLint("SetTextI18n")
     public void atacar(View view) {
@@ -188,6 +180,14 @@ public class InicioActivity extends AppCompatActivity {
 
         setValores();
 
+        Animation mover_dano = new TranslateAnimation(0,20,0,-100);
+        mover_dano.setDuration(300);
+        txt_dano_exibido.setText(""+danoPersonagem);
+        txt_dano_exibido.startAnimation(mover_dano);
+
+
+
+
         MediaPlayer mp = MediaPlayer.create(InicioActivity.this, R.raw.hit_1);
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -210,21 +210,8 @@ public class InicioActivity extends AppCompatActivity {
     public void sairDaConta(View view) {
         music_fundo.stop();
         boxDadosUserLogado.removeAll();
-        //setaUserDeslogado();
         finish();
     }
-/*
-    public void setaUserDeslogado(){
-        for (int i = 1; i<= boxUsuarios.getAll().size(); i++){
-            boolean userStatus = boxUsuarios.getAll().get(i - 1).isLogado();
-            if (userStatus){
-                Usuario usuario = boxUsuarios.get(i);
-                usuario.setLogado(false);
-                boxUsuarios.put(usuario);
-                break;
-            }
-        }
-    }*/
 
     public List<Upgrade> setUpsDisponiveis(){
         int idUserlogado = boxDadosUserLogado.getAll().get(0).getNun_id();
@@ -261,7 +248,6 @@ public class InicioActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void verStatus(View view) {
         startActivity(new Intent(this,PopStatus.class));
-
     }
 
     public void recebeBonus(View view) {
@@ -275,6 +261,15 @@ public class InicioActivity extends AppCompatActivity {
         setValores();
         botaoBau.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "Bônus recebido!", Toast.LENGTH_SHORT).show();
+
+        MediaPlayer som_bau = MediaPlayer.create(InicioActivity.this, R.raw.coin_1);
+        som_bau.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer som_bau) {
+                som_bau.release();
+            }
+        });
+        som_bau.start();
 
     }
 }
