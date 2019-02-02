@@ -1,18 +1,17 @@
 package com.example.brendon.sistemadelogin.Telas_login;
 
-import android.graphics.drawable.AnimationDrawable;
-import android.support.constraint.ConstraintLayout;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 import android.widget.EditText;
 import android.content.Intent;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.brendon.sistemadelogin.InicioActivity;
+import com.example.brendon.sistemadelogin.TelasExtras.HistoriaActivity;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
-import com.example.brendon.sistemadelogin.InicioActivity;
 import com.example.brendon.sistemadelogin.Models.Usuario;
 import com.example.brendon.sistemadelogin.dal.App;
 import com.example.brendon.sistemadelogin.R;
@@ -24,6 +23,8 @@ public class LoginActivity extends AppCompatActivity {
     Box<Usuario> boxUsuarios;
     Box<UsuarioLogado> boxDadosUsuariosLogado;
     Box<Upgrade> boxUpdrades;
+    EditText usuario, senha;
+    MediaPlayer music_fundo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,18 @@ public class LoginActivity extends AppCompatActivity {
         boxUsuarios = ((App)getApplication()).getBoxStore().boxFor(Usuario.class);
         boxUpdrades = ((App)getApplication()).getBoxStore().boxFor(Upgrade.class);
         boxDadosUsuariosLogado = ((App)getApplication()).getBoxStore().boxFor(UsuarioLogado.class);
+
+        music_fundo = MediaPlayer.create(LoginActivity.this, R.raw.song_bg_login);
+        music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer music_fundo) {
+                music_fundo.start();
+            }
+        });
+        music_fundo.start();
+
+        usuario = findViewById(R.id.usuario_login);
+        senha = findViewById(R.id.senha_login);
     }
 
     public void Cadastrar(View view) {
@@ -40,11 +53,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void Entrar(View view) {
-        EditText usuario, senha;
-
-        usuario = findViewById(R.id.usuario_login);
-        senha = findViewById(R.id.senha_login);
-
         String nomeUsuario = usuario.getText().toString();
         String senhaUsuario = senha.getText().toString();
 
@@ -58,18 +66,26 @@ public class LoginActivity extends AppCompatActivity {
                 Usuario usuarioAtual = boxUsuarios.getAll().get(i);
                 String nomeUsuarioAtual = usuarioAtual.getNome();
                 String senhaUsuarioAtual = usuarioAtual.getSenha();
-                int idUsuarioAtual= usuarioAtual.getNun_id();
+                boolean statusUsuarioAtual = usuarioAtual.isNovoUsuario();
+                int idUsuarioAtual = usuarioAtual.getNun_id();
 
                 if (nomeUsuario.equals(nomeUsuarioAtual)){
                     if(senhaUsuario.equals(senhaUsuarioAtual)){
 
                         Intent intent = new Intent();
-                        intent.putExtra("logado", true);
                         setResult(RESULT_OK, intent);
-                        setaLogado(nomeUsuarioAtual);
                         boxDadosUsuariosLogado.put(new UsuarioLogado(idUsuarioAtual));
 
-                        Toast.makeText(this, "Bem vindo de volta!", Toast.LENGTH_SHORT).show();
+                        if(statusUsuarioAtual){
+                            music_fundo.stop();
+                            Usuario usuario = boxUsuarios.get(idUsuarioAtual);
+                            usuario.setNovoUsuario(false);
+                            boxUsuarios.put(usuario);
+                            Intent intentIntroducao = new Intent(this, HistoriaActivity.class);
+                            startActivity(intentIntroducao);
+                        }
+                        music_fundo.stop();
+                        Toast.makeText(this, "Bem vindo!", Toast.LENGTH_SHORT).show();
                         finish();
                     }else {
                         Toast.makeText(this, "Senha incorreta", Toast.LENGTH_SHORT).show();
@@ -79,18 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void setaLogado(String nomeUser){
-        for (int i = 1; i< boxUsuarios.getAll().size(); i++){
-            String nome = boxUsuarios.getAll().get(i - 1).getNome();
-            if (nome.equals(nomeUser)){
-                Toast.makeText(this, nome +"  - ", Toast.LENGTH_SHORT).show();
-                Usuario usuario = boxUsuarios.get(i);
-                usuario.setLogado(true);
-                boxUsuarios.put(usuario);
-                break;
-            }
-        }
-    }
+
 
     public boolean encontraUsuario(String nomeUsuario){
         for (int i = 0; i < boxUsuarios.count(); i++){
@@ -101,17 +106,5 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     return false;
-    }
-
-    public void resetauser(View view){
-        boxUsuarios.removeAll();
-        boxUpdrades.removeAll();
-
-    }
-
-    public void qtd(View view) {
-        long qtdUser = boxUsuarios.count();
-        long wtd = boxUsuarios.getAll().size();
-        Toast.makeText(this, "" + qtdUser +" kkk " + wtd, Toast.LENGTH_SHORT).show();
     }
 }

@@ -56,8 +56,8 @@
 
     <Button
         android:id="@+id/buttonStatus"
-        android:layout_width="41dp"
-        android:layout_height="36dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/book_status"
         android:onClick="verStatus"
@@ -217,5 +217,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/recyclerUpgrads"
         app:layout_constraintVertical_bias="0.829" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/ic_info"
+        android:onClick="vai"
+        app:layout_constraintBottom_toBottomOf="@+id/view6"
+        app:layout_constraintEnd_toEndOf="@+id/buttonStatus"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/view6" />
 
 </android.support.constraint.ConstraintLayout>

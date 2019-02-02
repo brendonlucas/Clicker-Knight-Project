@@ -1,41 +1,43 @@
 package com.example.brendon.sistemadelogin;
 
-import android.annotation.SuppressLint;
-import android.graphics.drawable.AnimationDrawable;
-import android.media.MediaPlayer;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.animation.Animation;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.AlertDialog;
+import android.view.animation.Animation;
+import android.annotation.SuppressLint;
+import android.media.MediaPlayer;
 import android.widget.ImageView;
+import android.widget.Button;
 
+import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.brendon.sistemadelogin.TelasExtras.FinalGameActivity;
+import com.example.brendon.sistemadelogin.Telas_login.LoginActivity;
 import com.example.brendon.sistemadelogin.Adapters.UpgradsAdapter;
-import com.example.brendon.sistemadelogin.Models.Boss;
+import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
-import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.Pops.PopStatus;
-import com.example.brendon.sistemadelogin.Telas_login.LoginActivity;
 import com.example.brendon.sistemadelogin.Models.Usuario;
+import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.dal.App;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import io.objectbox.Box;
+import java.util.Random;
+import java.util.List;
+
 
 public class InicioActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 10;
+    private static final int REQUEST_CODE_END_GAME = 100;
     Box<Usuario> boxUsuarios;
     Box<Upgrade>  boxUpgrads;
     Box<Personagem> boxPersonagens;
@@ -64,7 +66,6 @@ public class InicioActivity extends AppCompatActivity {
         if (boxUsuarios.count() == 0 || boxDadosUserLogado.count() == 0) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            Toast.makeText(this, "cadastrese ou logue", Toast.LENGTH_SHORT).show();
             startActivityForResult(intent,REQUEST_CODE);
         }else{
             setAtributosAdicionais();
@@ -72,52 +73,54 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     public void setAtributosAdicionais(){
+        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+        int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
+        if (vida_boss <= 0){
+            finalizaGame();
 
-        //verificaUserLogado();
-        music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
-        music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.start();
+        }else{
+            music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
+            music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.start();
+                }
+            });
+            music_fundo.start();
 
-            }
-        });
-        music_fundo.start();
+            recicleUpgrads = findViewById(R.id.recyclerUpgrads);
+            image_hero = findViewById(R.id.Hero);
+            image_boss = findViewById(R.id.image_Boss);
+            image_hit = findViewById(R.id.hit_boss);
+            botaoBook = findViewById(R.id.buttonStatus);
+            botaoBau = findViewById(R.id.bonus_blood_coins);
+            txt_hp_Boss = findViewById(R.id.txt_hp_boss);
+            txt_gold = findViewById(R.id.txt_gold);
+            txt_dano_exibido = findViewById(R.id.mostra_hit);
+            txt_info_sem_gold = findViewById(R.id.txt_blood_coins_insuficientes);
 
+            image_hero.setBackgroundResource(R.drawable.sequencia_ataque);
+            animaHero = (AnimationDrawable)image_hero.getBackground();
+            animaHero.start();
 
-        recicleUpgrads = findViewById(R.id.recyclerUpgrads);
-        image_hero = findViewById(R.id.Hero);
-        image_boss = findViewById(R.id.image_Boss);
-        image_hit = findViewById(R.id.hit_boss);
-        botaoBook = findViewById(R.id.buttonStatus);
-        botaoBau = findViewById(R.id.bonus_blood_coins);
-        txt_hp_Boss = findViewById(R.id.txt_hp_boss);
-        txt_gold = findViewById(R.id.txt_gold);
-        txt_dano_exibido = findViewById(R.id.mostra_hit);
-        txt_info_sem_gold = findViewById(R.id.txt_blood_coins_insuficientes);
+            image_hit.setBackgroundResource(R.drawable.sequencia_hit);
+            animaHit = (AnimationDrawable)image_hit.getBackground();
+            animaHit.start();
 
+            botaoBook.setBackgroundResource(R.drawable.animate_book);
+            animaBook = (AnimationDrawable)botaoBook.getBackground();
+            animaBook.start();
 
-        image_hero.setBackgroundResource(R.drawable.sequencia_ataque);
-        animaHero = (AnimationDrawable)image_hero.getBackground();
-        animaHero.start();
+            image_boss.setBackgroundResource(R.drawable.sequencia_boss);
+            animeBoss = (AnimationDrawable)image_boss.getBackground();
+            animeBoss.start();
 
-        image_hit.setBackgroundResource(R.drawable.sequencia_hit);
-        animaHit = (AnimationDrawable)image_hit.getBackground();
-        animaHit.start();
-
-        botaoBook.setBackgroundResource(R.drawable.animate_book);
-        animaBook = (AnimationDrawable)botaoBook.getBackground();
-        animaBook.start();
-
-        image_boss.setBackgroundResource(R.drawable.sequencia_boss);
-        animeBoss = (AnimationDrawable)image_boss.getBackground();
-        animeBoss.start();
-
-        setUpsDisponiveis();
-        setValores();
-        UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis());
-        recicleUpgrads.setAdapter(adapter);
-        recicleUpgrads.setLayoutManager(new LinearLayoutManager(this));
+            setUpsDisponiveis();
+            setValores();
+            UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis());
+            recicleUpgrads.setAdapter(adapter);
+            recicleUpgrads.setLayoutManager(new LinearLayoutManager(this));
+        }
     }
     @SuppressLint("SetTextI18n")
     public void setValores(){
@@ -137,6 +140,14 @@ public class InicioActivity extends AppCompatActivity {
                     finish();
                 }
             }
+        }else if (requestCode == REQUEST_CODE_END_GAME){
+            if (resultCode == RESULT_OK){
+                music_fundo.stop();
+                finish();
+            }else {
+                music_fundo.stop();
+                finish();
+            }
         }
     }
 
@@ -144,8 +155,8 @@ public class InicioActivity extends AppCompatActivity {
     public void atacar(View view) {
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
 
+        //0.2% de chance de receber Bonus
         Random geradorNum = new Random();
-        //0.2% de chance
         int numero = geradorNum.nextInt(501);
         if (verificaChanceBonus(numero)){
             botaoBau.setVisibility(View.VISIBLE);
@@ -165,54 +176,62 @@ public class InicioActivity extends AppCompatActivity {
         int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
         int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
         int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
+        int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
 
         int hpBossAposClique = vida_boss - danoPersonagem;
-
         Boss boss = boxBoss.get(idUserLogado);
         boss.setVida(hpBossAposClique);
         boxBoss.put(boss);
 
-        // A quantidade de gold ganho por clique equivale a seu ataque
-        int goldAposClique = goldAtualPersonagem + danoPersonagem;
+        int goldAposClique = goldAtualPersonagem + goldPorClique;
         Personagem personagem = boxPersonagens.get(idUserLogado);
         personagem.setGold(goldAposClique);
         boxPersonagens.put(personagem);
 
+        // set informações dos valores de vida e Gold na tela
         setValores();
-
+        // cria evento de animação de texto
         Animation mover_dano = new TranslateAnimation(0,20,0,-100);
         mover_dano.setDuration(300);
         txt_dano_exibido.setText(""+danoPersonagem);
         txt_dano_exibido.startAnimation(mover_dano);
 
-
-
-
-        MediaPlayer mp = MediaPlayer.create(InicioActivity.this, R.raw.hit_1);
-        mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        // set som ao clicar
+        MediaPlayer som_clique = MediaPlayer.create(InicioActivity.this, R.raw.hit_1);
+        som_clique.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
-            public void onCompletion(MediaPlayer mp) {
-                mp.release();
+            public void onCompletion(MediaPlayer som_clique) {
+                som_clique.release();
             }
         });
-        mp.start();
+        som_clique.start();
+
+        if (hpBossAposClique <= 0){
+            finalizaGame();
+        }
     }
 
+    public void finalizaGame(){
+        Intent intent = new Intent(this, FinalGameActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(intent,REQUEST_CODE_END_GAME);
+    }
+    //  verifica chance de bônus ao clicar
     public boolean verificaChanceBonus(int numero){
-        int[] chances =  new int[] {1};
-        for(int i =0; i<chances.length; i++){
-            if(numero == chances[i]){
+        int chances =  1;
+        if(numero == chances){
                 return true;
-            }
         }
         return false;
     }
+
     public void sairDaConta(View view) {
         music_fundo.stop();
         boxDadosUserLogado.removeAll();
         finish();
     }
 
+    // lista os upgrades disponiveis para uma determinada conta logada
     public List<Upgrade> setUpsDisponiveis(){
         int idUserlogado = boxDadosUserLogado.getAll().get(0).getNun_id();
         List<Upgrade> listaUpsUserAtual = new ArrayList<>();
@@ -249,7 +268,7 @@ public class InicioActivity extends AppCompatActivity {
     public void verStatus(View view) {
         startActivity(new Intent(this,PopStatus.class));
     }
-
+    // ao clicar no icone do bônus esta função é chamada
     public void recebeBonus(View view) {
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
         int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
@@ -270,6 +289,9 @@ public class InicioActivity extends AppCompatActivity {
             }
         });
         som_bau.start();
+    }
 
+    public void vai(View view) {
+        finalizaGame();
     }
 }

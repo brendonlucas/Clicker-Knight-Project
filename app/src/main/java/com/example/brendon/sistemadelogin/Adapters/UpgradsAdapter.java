@@ -79,12 +79,17 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
 
                     int valorMelhoriaAdiconada = upAtual.getMelhoria();
                     int valorAtualClique = boxPersonagem.getAll().get(idUserLogado - 1).getPoderClique();
+                    int valorAtualGoldPorClique = boxPersonagem.getAll().get(idUserLogado - 1).getGoldPorClique();
                     int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
                     int novoValorGold = goldAtual - valorUp;
+                    int novoGoldPorClique = valorAtualGoldPorClique * 2;
+
                     Personagem personagem = boxPersonagem.get(idUserLogado);
                     personagem.setPoderClique(novoValorClique);
                     personagem.setGold(novoValorGold);
+                    personagem.setGoldPorClique(novoGoldPorClique);
                     boxPersonagem.put(personagem);
+
 
                     boxUpgrads.remove(upAtual);
                     upgradeListDisponiveis.remove(position);

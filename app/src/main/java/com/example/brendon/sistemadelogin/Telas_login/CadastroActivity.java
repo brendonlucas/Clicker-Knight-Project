@@ -6,10 +6,10 @@ import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Models.Usuario;
+import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.dal.App;
 import com.example.brendon.sistemadelogin.R;
 import io.objectbox.Box;
@@ -45,8 +45,8 @@ public class CadastroActivity extends AppCompatActivity {
 
         } else if (boxUsuarios.getAll().size() == 0 || !encontrou(nomeUsuario)) {
             int novaId = boxUsuarios.getAll().size() + 1;
-            boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,false));
-            boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,false));
+            boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,true));
+            boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1,false));
             boxBoss.put(new Boss(novaId, "Dark knight",1000000000));
             setUpgrads(novaId);
             Toast.makeText(this, "Cadastrado com sucesso!" , Toast.LENGTH_LONG).show();
@@ -71,7 +71,7 @@ public class CadastroActivity extends AppCompatActivity {
         boxUpgrads.put(new Upgrade(id,"Força +4: Dano x2",600000,2));
         boxUpgrads.put(new Upgrade(id,"Força +5: Dano x2",999999,2));
         boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x3",2700000,3));
-        boxUpgrads.put(new Upgrade(id,"Força +6: Dano x3",4400000,3));
+        boxUpgrads.put(new Upgrade(id,"Força +6: Dano x3",4400000,60));
     }
 
     public boolean encontrou(String nomeUsuario) {
@@ -79,11 +79,9 @@ public class CadastroActivity extends AppCompatActivity {
             Usuario userAtual = boxUsuarios.getAll().get(i);
             String nomeUsuarioAtual = userAtual.getNome();
             if (nomeUsuario.equals(nomeUsuarioAtual)) {
-                Toast.makeText(this, "achou" , Toast.LENGTH_LONG).show();
                 return true;
             }
         }
-        Toast.makeText(this, "nao achou" , Toast.LENGTH_LONG).show();
         return false;
     }
 }

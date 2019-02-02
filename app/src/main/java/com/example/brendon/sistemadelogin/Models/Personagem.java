@@ -11,14 +11,16 @@ public class Personagem {
     private String nome;
     private int gold;
     private int poderClique;
+    private int goldPorClique;
     private boolean personagemFinalizado;
     private int num_Id;
 
     Personagem(){}
-    public  Personagem(int num_Id, String nome, int gold, int poderClique, boolean personagemFinalizado){
+    public  Personagem(int num_Id, String nome, int gold, int poderClique,int goldPorClique, boolean personagemFinalizado){
         this.num_Id = num_Id;
         this.nome = nome;
         this.gold = gold;
+        this.goldPorClique= goldPorClique;
         this.poderClique = poderClique;
         this.personagemFinalizado = personagemFinalizado;
     }
@@ -53,5 +55,13 @@ public class Personagem {
 
     public int getNum_Id() {
         return num_Id;
+    }
+
+    public int getGoldPorClique() {
+        return goldPorClique;
+    }
+
+    public void setGoldPorClique(int goldPorClique) {
+        this.goldPorClique = goldPorClique;
     }
 }

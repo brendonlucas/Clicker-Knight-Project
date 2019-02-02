@@ -77,7 +77,7 @@
     },
     {
       "id": "5:3360496237804377235",
-      "lastPropertyId": "5:585010783519078119",
+      "lastPropertyId": "7:8865283384099072387",
       "name": "Personagem",
       "properties": [
         {
@@ -99,13 +99,21 @@
         {
           "id": "5:585010783519078119",
           "name": "personagemFinalizado"
+        },
+        {
+          "id": "6:9837678030876017",
+          "name": "num_Id"
+        },
+        {
+          "id": "7:8865283384099072387",
+          "name": "goldPorClique"
         }
       ],
       "relations": []
     },
     {
       "id": "6:410214276416690456",
-      "lastPropertyId": "3:4181721980939534271",
+      "lastPropertyId": "4:4276190619462718939",
       "name": "Boss",
       "properties": [
         {
@@ -119,6 +127,10 @@
         {
           "id": "3:4181721980939534271",
           "name": "vida"
+        },
+        {
+          "id": "4:4276190619462718939",
+          "name": "num_Id"
         }
       ],
       "relations": []

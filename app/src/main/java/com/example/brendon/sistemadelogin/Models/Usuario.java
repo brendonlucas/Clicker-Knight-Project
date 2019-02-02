@@ -11,16 +11,16 @@ public class Usuario {
     public long id;
     private String nome;
     private String senha;
-    private boolean logado;
+    private boolean novoUsuario;
     private int nun_id;
 
     Usuario(){}
 
-    public Usuario ( int nun_id,String nome, String senha, boolean logado){
+    public Usuario ( int nun_id,String nome, String senha, boolean novoUsuario){
         this.nun_id = nun_id;
         this.nome = nome;
         this.senha = senha;
-        this.logado = logado;
+        this.novoUsuario = novoUsuario;
 
     }
 
@@ -36,11 +36,11 @@ public class Usuario {
         return nun_id;
     }
 
-    public boolean isLogado() {
-        return logado;
+    public boolean isNovoUsuario() {
+        return novoUsuario;
     }
 
-    public void setLogado(boolean logado) {
-        this.logado = logado;
+    public void setNovoUsuario(boolean novoUsuario) {
+        this.novoUsuario = novoUsuario;
     }
 }
