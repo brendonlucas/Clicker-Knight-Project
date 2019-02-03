@@ -1,6 +1,5 @@
 package com.example.brendon.sistemadelogin.Models;
 
-import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 

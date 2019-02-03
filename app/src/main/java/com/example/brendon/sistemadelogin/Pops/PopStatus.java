@@ -1,17 +1,17 @@
 package com.example.brendon.sistemadelogin.Pops;
 
 import android.annotation.SuppressLint;
+import android.util.DisplayMetrics;
+import android.widget.TextView;
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.TextView;
 
-import com.example.brendon.sistemadelogin.Models.Boss;
-import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
-import com.example.brendon.sistemadelogin.R;
+import com.example.brendon.sistemadelogin.Models.Personagem;
+import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.dal.App;
+import com.example.brendon.sistemadelogin.R;
 
 import io.objectbox.Box;
 
@@ -42,6 +42,8 @@ public class PopStatus extends Activity {
 
         int width = displayMetrics.widthPixels;
         int height= displayMetrics.heightPixels;
+        getWindow().setLayout(width *1,height*1 );
+
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
 
         String nomepersonagem = boxPersonagens.getAll().get(idUserLogado -1).getNome();
@@ -56,9 +58,6 @@ public class PopStatus extends Activity {
         txt_dano.setText("Dano por clique: " + danoPersonagem);
         txt_hp_Boss.setText("Vida do Boss: "+ vida_do_Boss);
         txt_gold.setText("Gold Atual: " + goldAtual);
-
-
-        getWindow().setLayout(width *1,height*1 );
 
     }
 

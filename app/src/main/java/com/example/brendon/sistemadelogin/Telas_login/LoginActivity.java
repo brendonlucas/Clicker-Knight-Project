@@ -1,17 +1,16 @@
 package com.example.brendon.sistemadelogin.Telas_login;
 
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
+import android.media.MediaPlayer;
 import android.widget.EditText;
 import android.content.Intent;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.brendon.sistemadelogin.InicioActivity;
 import com.example.brendon.sistemadelogin.TelasExtras.HistoriaActivity;
-import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
+import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Models.Usuario;
 import com.example.brendon.sistemadelogin.dal.App;
 import com.example.brendon.sistemadelogin.R;

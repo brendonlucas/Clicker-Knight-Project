@@ -56,8 +56,8 @@
 
     <Button
         android:id="@+id/buttonStatus"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/book_status"
         android:onClick="verStatus"
@@ -164,12 +164,10 @@
     <View
         android:id="@+id/view6"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="95dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/view5"
         app:layout_constraintEnd_toStartOf="@+id/txt_gold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -224,7 +222,7 @@
         android:layout_height="35dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/ic_info"
-        android:onClick="vai"
+        android:onClick="ajuda"
         app:layout_constraintBottom_toBottomOf="@+id/view6"
         app:layout_constraintEnd_toEndOf="@+id/buttonStatus"
         app:layout_constraintHorizontal_bias="1.0"

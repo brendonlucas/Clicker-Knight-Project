@@ -1,7 +1,7 @@
 package com.example.brendon.sistemadelogin.dal;
 
-import android.app.Application;
 import com.example.brendon.sistemadelogin.Models.MyObjectBox;
+import android.app.Application;
 import io.objectbox.BoxStore;
 
 public class App extends Application {

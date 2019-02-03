@@ -10,10 +10,9 @@ import android.view.animation.Animation;
 import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.widget.ImageView;
-import android.widget.Button;
-
 import android.widget.TextView;
 import android.content.Intent;
+import android.widget.Button;
 import android.widget.Toast;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +25,7 @@ import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Pops.PopStatus;
 import com.example.brendon.sistemadelogin.Models.Usuario;
+import com.example.brendon.sistemadelogin.Pops.PopAjuda;
 import com.example.brendon.sistemadelogin.Models.Boss;
 import com.example.brendon.sistemadelogin.dal.App;
 
@@ -74,20 +74,21 @@ public class InicioActivity extends AppCompatActivity {
 
     public void setAtributosAdicionais(){
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+
+        music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
+        music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+        music_fundo.start();
+
         int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
         if (vida_boss <= 0){
             finalizaGame();
 
         }else{
-            music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
-            music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    mp.start();
-                }
-            });
-            music_fundo.start();
-
             recicleUpgrads = findViewById(R.id.recyclerUpgrads);
             image_hero = findViewById(R.id.Hero);
             image_boss = findViewById(R.id.image_Boss);
@@ -142,10 +143,8 @@ public class InicioActivity extends AppCompatActivity {
             }
         }else if (requestCode == REQUEST_CODE_END_GAME){
             if (resultCode == RESULT_OK){
-                music_fundo.stop();
                 finish();
             }else {
-                music_fundo.stop();
                 finish();
             }
         }
@@ -212,6 +211,7 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     public void finalizaGame(){
+        music_fundo.stop();
         Intent intent = new Intent(this, FinalGameActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(intent,REQUEST_CODE_END_GAME);
@@ -255,7 +255,6 @@ public class InicioActivity extends AppCompatActivity {
 
     public void sairDoGame(View v){
         music_fundo.stop();
-        Toast.makeText(InicioActivity.this, "saiu", Toast.LENGTH_SHORT).show();
         finish();
     }
 
@@ -268,6 +267,7 @@ public class InicioActivity extends AppCompatActivity {
     public void verStatus(View view) {
         startActivity(new Intent(this,PopStatus.class));
     }
+
     // ao clicar no icone do bônus esta função é chamada
     public void recebeBonus(View view) {
         int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
@@ -291,7 +291,7 @@ public class InicioActivity extends AppCompatActivity {
         som_bau.start();
     }
 
-    public void vai(View view) {
-        finalizaGame();
+    public void ajuda(View view) {
+        startActivity(new Intent(this,PopAjuda.class));
     }
 }

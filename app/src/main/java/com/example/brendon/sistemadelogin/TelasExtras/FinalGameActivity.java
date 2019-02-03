@@ -1,7 +1,7 @@
 package com.example.brendon.sistemadelogin.TelasExtras;
 
-import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
+import android.media.MediaPlayer;
 import android.widget.VideoView;
 import android.widget.TextView;
 import android.content.Intent;
@@ -10,18 +10,25 @@ import android.os.Bundle;
 import android.view.View;
 import android.net.Uri;
 
+import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
+import com.example.brendon.sistemadelogin.dal.App;
 import com.example.brendon.sistemadelogin.R;
+
+import io.objectbox.Box;
 
 public class FinalGameActivity extends AppCompatActivity {
     Button avancar,finalizar;
     TextView txtAgradecimentos;
     VideoView videoFim;
+    Box<UsuarioLogado> boxDadosUserLogado;
     Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_game);
+
+        boxDadosUserLogado = ((App)getApplication()).getBoxStore().boxFor(UsuarioLogado.class);
 
         avancar = findViewById(R.id.botao_avancar);
         finalizar = findViewById(R.id.botao_finalizar);
@@ -49,6 +56,7 @@ public class FinalGameActivity extends AppCompatActivity {
     public void finalizaGame(View view) {
         Intent intent = new  Intent();
         setResult(RESULT_OK,intent);
+        boxDadosUserLogado.removeAll();
         finish();
     }
 }

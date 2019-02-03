@@ -9,26 +9,37 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
-        <activity android:name=".InicioActivity">
+        <activity android:name=".InicioActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Telas_login.CadastroActivity" />
-        <activity android:name=".Telas_login.LoginActivity" />
+        <activity android:name=".Telas_login.CadastroActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Telas_login.LoginActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".Pops.PopStatus"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
+        <activity
+            android:name=".Pops.PopAjuda"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog.Alert" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".TelasExtras.HistoriaActivity" />
-        <activity android:name=".TelasExtras.FinalGameActivity"></activity>
+        <activity android:name=".TelasExtras.HistoriaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".TelasExtras.FinalGameActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

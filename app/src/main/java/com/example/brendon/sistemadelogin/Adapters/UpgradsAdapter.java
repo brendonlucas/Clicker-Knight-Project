@@ -1,23 +1,22 @@
 package com.example.brendon.sistemadelogin.Adapters;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.media.MediaPlayer;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.widget.Button;
+import android.support.v7.widget.RecyclerView;
+import android.support.annotation.NonNull;
+import android.view.animation.Animation;
+import android.annotation.SuppressLint;
+import android.view.LayoutInflater;
+import android.media.MediaPlayer;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.content.Context;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.view.View;
 
+import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
-import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.R;
 
 import java.util.List;
@@ -82,7 +81,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                     int valorAtualGoldPorClique = boxPersonagem.getAll().get(idUserLogado - 1).getGoldPorClique();
                     int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
                     int novoValorGold = goldAtual - valorUp;
-                    int novoGoldPorClique = valorAtualGoldPorClique * 2;
+                    int novoGoldPorClique = valorAtualGoldPorClique * 10;
 
                     Personagem personagem = boxPersonagem.get(idUserLogado);
                     personagem.setPoderClique(novoValorClique);
