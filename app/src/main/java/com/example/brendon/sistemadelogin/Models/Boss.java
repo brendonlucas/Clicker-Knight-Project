@@ -1,5 +1,6 @@
 package com.example.brendon.sistemadelogin.Models;
 
+import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -34,5 +35,9 @@ public class Boss {
 
     public int getNum_Id() {
         return num_Id;
+    }
+
+    public static void criaBoss(Box<Boss> boxBoss,int novaId){
+        boxBoss.put(new Boss(novaId, "Dark knight",1000000000));
     }
 }

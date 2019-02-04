@@ -1,5 +1,6 @@
 package com.example.brendon.sistemadelogin.Models;
 
+import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
@@ -43,7 +44,6 @@ public class Personagem {
         this.poderClique = poderClique;
     }
 
-
     public int getNum_Id() {
         return num_Id;
     }
@@ -54,5 +54,9 @@ public class Personagem {
 
     public void setGoldPorClique(int goldPorClique) {
         this.goldPorClique = goldPorClique;
+    }
+
+    public static void criaPersonagem(Box<Personagem> boxPersonagens ,int novaId, String nomeUsuario){
+        boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1));
     }
 }

@@ -22,7 +22,6 @@ public class CadastroActivity extends AppCompatActivity {
     Box<Boss> boxBoss;
     EditText usuario, senha;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,20 +42,23 @@ public class CadastroActivity extends AppCompatActivity {
         if (nomeUsuario.equals("") || senhaUsuario.equals("")) {
             Toast.makeText(this, "Dados Insuficentes", Toast.LENGTH_LONG).show();
 
-        } else if (boxUsuarios.getAll().size() == 0 || !encontrou(nomeUsuario)) {
+        } else if (boxUsuarios.getAll().size() == 0 || !Usuario.encontraUsuario(boxUsuarios, nomeUsuario)) {
             int novaId = boxUsuarios.getAll().size() + 1;
-            boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,true));
-            boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1));
-            boxBoss.put(new Boss(novaId, "Dark knight",1000000000));
-            setUpgrads(novaId);
+            Usuario.adicionarUsuario(boxUsuarios, novaId, nomeUsuario, senhaUsuario);
+            Personagem.criaPersonagem(boxPersonagens, novaId, nomeUsuario);
+            Boss.criaBoss(boxBoss,novaId);
+            Upgrade.setUpgrads(novaId, boxUpgrads);
+            //boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,true));
+            //boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1));
+            //boxBoss.put(new Boss(novaId, "Dark knight",1000000000));
             Toast.makeText(this, "Cadastrado com sucesso!" , Toast.LENGTH_LONG).show();
             finish();
 
-        }else if(encontrou(nomeUsuario)){
+        }else if(Usuario.encontraUsuario(boxUsuarios,nomeUsuario)){
             Toast.makeText(this, "Usuario existente!" , Toast.LENGTH_LONG).show();
         }
     }
-
+/*
     private void setUpgrads(int id){
         boxUpgrads.put(new Upgrade(id,"Força +1: Dano x2",100,10));
         boxUpgrads.put(new Upgrade(id,"Força +2: Dano x2",700,10));
@@ -84,5 +86,6 @@ public class CadastroActivity extends AppCompatActivity {
         }
         return false;
     }
+*/
 }
 

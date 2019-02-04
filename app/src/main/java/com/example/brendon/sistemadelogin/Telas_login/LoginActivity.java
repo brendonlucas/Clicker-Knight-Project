@@ -19,8 +19,8 @@ import io.objectbox.Box;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Box<Usuario> boxUsuarios;
     Box<UsuarioLogado> boxDadosUsuariosLogado;
+    Box<Usuario> boxUsuarios;
     Box<Upgrade> boxUpdrades;
     EditText usuario, senha;
     MediaPlayer music_fundo;
@@ -58,9 +58,27 @@ public class LoginActivity extends AppCompatActivity {
         if (nomeUsuario.equals("") || senhaUsuario.equals("")){
             Toast.makeText(this, "Dados Insuficentes", Toast.LENGTH_SHORT).show();
         }
-        else if(!encontraUsuario(nomeUsuario)){
+        else if(!Usuario.encontraUsuario(boxUsuarios,nomeUsuario)){
             Toast.makeText(this, "Usuario não cadastrado", Toast.LENGTH_SHORT).show();
         } else{
+            if (Usuario.logar(boxUsuarios,boxDadosUsuariosLogado,nomeUsuario,senhaUsuario)){
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                music_fundo.stop();
+
+                if(Usuario.verificaSeUsuarioAtualENovo(boxUsuarios, boxDadosUsuariosLogado)){
+                    Usuario.setUserNotNew(boxUsuarios, boxDadosUsuariosLogado);
+                    Intent intentIntroducao = new Intent(this, HistoriaActivity.class);
+                    startActivity(intentIntroducao);
+                }
+
+                Toast.makeText(this, "Bem vindo!", Toast.LENGTH_SHORT).show();
+                finish();
+
+            }else{
+                Toast.makeText(this, "Senha incorreta", Toast.LENGTH_SHORT).show();
+            }
+/*
             for (int i = 0; i < boxUsuarios.count(); i++){
                 Usuario usuarioAtual = boxUsuarios.getAll().get(i);
                 String nomeUsuarioAtual = usuarioAtual.getNome();
@@ -91,11 +109,12 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
             }
+            */
         }
     }
 
 
-
+/*
     public boolean encontraUsuario(String nomeUsuario){
         for (int i = 0; i < boxUsuarios.count(); i++){
             Usuario usuarioAtual = boxUsuarios.getAll().get(i);
@@ -106,4 +125,5 @@ public class LoginActivity extends AppCompatActivity {
         }
     return false;
     }
+*/
 }
