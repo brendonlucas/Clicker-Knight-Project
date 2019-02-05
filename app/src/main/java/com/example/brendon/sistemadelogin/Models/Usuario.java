@@ -1,13 +1,8 @@
 package com.example.brendon.sistemadelogin.Models;
 
-import android.content.Intent;
-import android.widget.Toast;
-
-import com.example.brendon.sistemadelogin.TelasExtras.HistoriaActivity;
-
-import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.Box;
 
 @Entity
 public class Usuario {

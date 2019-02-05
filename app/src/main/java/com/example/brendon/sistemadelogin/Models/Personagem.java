@@ -1,8 +1,8 @@
 package com.example.brendon.sistemadelogin.Models;
 
-import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.Box;
 
 @Entity
 public class Personagem {
@@ -58,5 +58,46 @@ public class Personagem {
 
     public static void criaPersonagem(Box<Personagem> boxPersonagens ,int novaId, String nomeUsuario){
         boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1));
+    }
+
+    public static int goldPersonagemAtual(Box<Personagem> boxPersonagens, int idUserLogado) {
+        return boxPersonagens.getAll().get(idUserLogado -1).getGold();
+    }
+
+    public static int danoPersonagemAtual(Box<Personagem> boxPersonagens, int idUserLogado) {
+        return boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
+    }
+
+    public static int goldCliquePersonagemAtual(Box<Personagem> boxPersonagens, int idUserLogado) {
+        return boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
+    }
+
+    public static int goldAposClique(Box<Personagem> boxPersonagens, int idUserLogado, int goldAtualPersonagem, int goldPorClique) {
+        int goldAposClique = goldAtualPersonagem + goldPorClique;
+        Personagem personagem = boxPersonagens.get(idUserLogado);
+        personagem.setGold(goldAposClique);
+        boxPersonagens.put(personagem);
+        return goldAposClique;
+    }
+
+    public static void setGoldComBonus(Box<Personagem> boxPersonagens, int idUserLogado) {
+        int goldComBonus = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado) * 2;
+        Personagem personagem = boxPersonagens.get(idUserLogado);
+        personagem.setGold(goldComBonus);
+        boxPersonagens.put(personagem);
+    }
+
+    public static void setDadosAposClique(Box<Personagem> boxPersonagem, int valorMelhoriaAdiconada, int idUserLogado, int goldAtual,int valorUp) {
+        int valorAtualClique = Personagem.danoPersonagemAtual(boxPersonagem,idUserLogado);
+        int valorAtualGoldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagem,idUserLogado);
+        int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
+        int novoValorGold = goldAtual - valorUp;
+        int novoGoldPorClique = valorAtualGoldPorClique * 10;
+
+        Personagem personagem = boxPersonagem.get(idUserLogado);
+        personagem.setPoderClique(novoValorClique);
+        personagem.setGold(novoValorGold);
+        personagem.setGoldPorClique(novoGoldPorClique);
+        boxPersonagem.put(personagem);
     }
 }

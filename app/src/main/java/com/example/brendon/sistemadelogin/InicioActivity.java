@@ -73,7 +73,7 @@ public class InicioActivity extends AppCompatActivity {
     }
 
     public void setAtributosAdicionais(){
-        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
 
         music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
         music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -84,10 +84,9 @@ public class InicioActivity extends AppCompatActivity {
         });
         music_fundo.start();
 
-        int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
+        int vida_boss = Boss.vidaBossAtual(boxBoss,idUserLogado);
         if (vida_boss <= 0){
             finalizaGame();
-
         }else{
             recicleUpgrads = findViewById(R.id.recyclerUpgrads);
             image_hero = findViewById(R.id.Hero);
@@ -116,18 +115,20 @@ public class InicioActivity extends AppCompatActivity {
             animeBoss = (AnimationDrawable)image_boss.getBackground();
             animeBoss.start();
 
-            setUpsDisponiveis();
+            //setUpsDisponiveis();
             setValores();
-            UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis());
+
+            UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis(),txt_gold);
             recicleUpgrads.setAdapter(adapter);
             recicleUpgrads.setLayoutManager(new LinearLayoutManager(this));
         }
     }
+
     @SuppressLint("SetTextI18n")
     public void setValores(){
-        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
-        txt_hp_Boss.setText("" + boxBoss.getAll().get(idUserLogado - 1).getVida());
-        txt_gold.setText("" + boxPersonagens.getAll().get(idUserLogado - 1).getGold());
+        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
+        txt_hp_Boss.setText("" + Boss.vidaBossAtual(boxBoss,idUserLogado));
+        txt_gold.setText("" + Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -152,12 +153,20 @@ public class InicioActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void atacar(View view) {
-        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
+        int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado);
+        int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens,idUserLogado);
+        int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens,idUserLogado);
+        int vida_boss = Boss.vidaBossAtual(boxBoss,idUserLogado);
+        //int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
+        //int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
+        //int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
+        //int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
 
         //0.2% de chance de receber Bonus
         Random geradorNum = new Random();
         int numero = geradorNum.nextInt(501);
-        if (verificaChanceBonus(numero)){
+        if (numero == 1){
             botaoBau.setVisibility(View.VISIBLE);
             botaoBau.setBackgroundResource(R.drawable.animate_bau);
             animaBau = (AnimationDrawable)botaoBau.getBackground();
@@ -172,27 +181,24 @@ public class InicioActivity extends AppCompatActivity {
         image_hit.setBackgroundResource(R.drawable.sequencia_hit);
         animaHit.start();
 
-        int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
-        int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
-        int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
-        int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
+        int hpBossAposClique = Boss.hpBossAposClique(boxBoss,idUserLogado,danoPersonagem,vida_boss);
+        //int hpBossAposClique = vida_boss - danoPersonagem;
+        //Boss boss = boxBoss.get(idUserLogado);
+        //boss.setVida(hpBossAposClique);
+        //boxBoss.put(boss);
 
-        int hpBossAposClique = vida_boss - danoPersonagem;
-        Boss boss = boxBoss.get(idUserLogado);
-        boss.setVida(hpBossAposClique);
-        boxBoss.put(boss);
-
-        int goldAposClique = goldAtualPersonagem + goldPorClique;
-        Personagem personagem = boxPersonagens.get(idUserLogado);
-        personagem.setGold(goldAposClique);
-        boxPersonagens.put(personagem);
+        int goldAposClique = Personagem.goldAposClique(boxPersonagens,idUserLogado,goldAtualPersonagem,goldPorClique);
+        //int goldAposClique = goldAtualPersonagem + goldPorClique;
+        //Personagem personagem = boxPersonagens.get(idUserLogado);
+        //personagem.setGold(goldAposClique);
+        //boxPersonagens.put(personagem);
 
         // set informações dos valores de vida e Gold na tela
         setValores();
         // cria evento de animação de texto
         Animation mover_dano = new TranslateAnimation(0,20,0,-100);
         mover_dano.setDuration(300);
-        txt_dano_exibido.setText(""+danoPersonagem);
+        txt_dano_exibido.setText(""+ danoPersonagem);
         txt_dano_exibido.startAnimation(mover_dano);
 
         // set som ao clicar
@@ -216,24 +222,17 @@ public class InicioActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivityForResult(intent,REQUEST_CODE_END_GAME);
     }
-    //  verifica chance de bônus ao clicar
-    public boolean verificaChanceBonus(int numero){
-        int chances =  1;
-        if(numero == chances){
-                return true;
-        }
-        return false;
-    }
 
     public void sairDaConta(View view) {
         music_fundo.stop();
+        dialog.cancel();
         boxDadosUserLogado.removeAll();
         finish();
     }
 
     // lista os upgrades disponiveis para uma determinada conta logada
     public List<Upgrade> setUpsDisponiveis(){
-        int idUserlogado = boxDadosUserLogado.getAll().get(0).getNun_id();
+        int idUserlogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
         List<Upgrade> listaUpsUserAtual = new ArrayList<>();
         for (int i = 0; i< boxUpgrads.getAll().size(); i++){
             Upgrade upgradeAtual = boxUpgrads.getAll().get(i);
@@ -255,6 +254,7 @@ public class InicioActivity extends AppCompatActivity {
 
     public void sairDoGame(View v){
         music_fundo.stop();
+        dialog.cancel();
         finish();
     }
 
@@ -270,13 +270,14 @@ public class InicioActivity extends AppCompatActivity {
 
     // ao clicar no icone do bônus esta função é chamada
     public void recebeBonus(View view) {
-        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
-        int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
-        int goldComBonus = goldAtualPersonagem * 2;
+        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
+        //int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado);
+        //int goldComBonus = goldAtualPersonagem * 2;
+        //Personagem personagem = boxPersonagens.get(idUserLogado);
+        //personagem.setGold(goldComBonus);
+        //boxPersonagens.put(personagem);
 
-        Personagem personagem = boxPersonagens.get(idUserLogado);
-        personagem.setGold(goldComBonus);
-        boxPersonagens.put(personagem);
+        Personagem.setGoldComBonus(boxPersonagens,idUserLogado);
         setValores();
         botaoBau.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "Bônus recebido!", Toast.LENGTH_SHORT).show();

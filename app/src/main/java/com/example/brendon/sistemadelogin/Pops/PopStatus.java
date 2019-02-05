@@ -44,21 +44,23 @@ public class PopStatus extends Activity {
         int height= displayMetrics.heightPixels;
         getWindow().setLayout(width *1,height*1 );
 
-        int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
-
+        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
         String nomepersonagem = boxPersonagens.getAll().get(idUserLogado -1).getNome();
-        int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
-        int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
-        int vida_do_Boss = boxBoss.getAll().get(idUserLogado -1).getVida();
-        int goldAtual =  boxPersonagens.getAll().get(idUserLogado -1).getGold();
+        int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens,idUserLogado);
+        int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens,idUserLogado);
+        int vida_do_Boss = Boss.vidaBossAtual(boxBoss,idUserLogado);
+        int goldAtual = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado);
 
+        //int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
+        //int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
+        //int vida_do_Boss = boxBoss.getAll().get(idUserLogado -1).getVida();
+        //int goldAtual =  boxPersonagens.getAll().get(idUserLogado -1).getGold();
 
         txt_gold_clique.setText("Blood coins por clique: "+ goldPorClique);
         txt_nome_hero.setText("Nome: " + nomepersonagem);
         txt_dano.setText("Dano por clique: " + danoPersonagem);
         txt_hp_Boss.setText("Vida do Boss: "+ vida_do_Boss);
         txt_gold.setText("Gold Atual: " + goldAtual);
-
     }
 
     public void fechastatus(View view) {

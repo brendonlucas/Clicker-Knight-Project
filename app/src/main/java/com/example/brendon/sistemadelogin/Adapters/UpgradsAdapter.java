@@ -19,32 +19,31 @@ import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.R;
 
+import io.objectbox.Box;
 import java.util.List;
 
-import io.objectbox.Box;
-
 public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsViewHolder>{
+    private Context context;
+    private Box<Upgrade> boxUpgrads;
+    private Box<Personagem> boxPersonagem;
+    private Box<UsuarioLogado> boxDadosUserLogado;
+    private List<Upgrade> upgradeListDisponiveis;
+    private TextView txt_info_sem_gold;
+    private TextView txt_gold;
 
-    Context context;
-    Box<Upgrade> boxUpgrads;
-    Box<Personagem> boxPersonagem;
-    Box<UsuarioLogado> boxDadosUserLogado;
-    List<Upgrade> upgradeListDisponiveis;
-    TextView txt_info_sem_gold;
-
-    public UpgradsAdapter(Context context,TextView txt_info_sem_gold, Box<Personagem> boxPersonagem,Box<UsuarioLogado> boxDadosUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis) {
+    public UpgradsAdapter(Context context,TextView txt_info_sem_gold, Box<Personagem> boxPersonagem,Box<UsuarioLogado> boxDadosUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis, TextView txt_gold) {
         this.boxUpgrads = boxUpgrads;
         this.boxPersonagem = boxPersonagem;
         this.boxDadosUserLogado = boxDadosUserLogado;
         this.upgradeListDisponiveis = upgradeListDisponiveis;
         this.txt_info_sem_gold = txt_info_sem_gold;
+        this.txt_gold = txt_gold;
         this.context = context;
     }
 
     @NonNull
     @Override
     public UpgradsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.card_ups, viewGroup, false);
         return new UpgradsViewHolder(view);
@@ -54,16 +53,17 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
     @Override
     public void onBindViewHolder(@NonNull final UpgradsViewHolder holder, final int position) {
         final Upgrade upAtual = this.upgradeListDisponiveis.get(position);
-        int valorParaComparacao = upAtual.getValor();
         holder.txtNome.setText(upAtual.getNome());
-        holder.txtvalor.setText(""+ upAtual.getValor());
+        holder.txtvalor.setText("" + upAtual.getValor());
+
+        int valorParaComparacao = upAtual.getValor();
         setImageInUp(holder, valorParaComparacao);
 
         holder.txtvalor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int idUserLogado = boxDadosUserLogado.getAll().get(0).getNun_id();
-                int goldAtual = boxPersonagem.getAll().get(idUserLogado - 1).getGold();
+                int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
+                int goldAtual = Personagem.goldPersonagemAtual(boxPersonagem,idUserLogado);
                 int valorUp = upAtual.getValor();
 
                 if (goldAtual >= valorUp){
@@ -75,20 +75,19 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                         }
                     });
                     mp.start();
-
                     int valorMelhoriaAdiconada = upAtual.getMelhoria();
-                    int valorAtualClique = boxPersonagem.getAll().get(idUserLogado - 1).getPoderClique();
-                    int valorAtualGoldPorClique = boxPersonagem.getAll().get(idUserLogado - 1).getGoldPorClique();
-                    int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
-                    int novoValorGold = goldAtual - valorUp;
-                    int novoGoldPorClique = valorAtualGoldPorClique * 10;
-
-                    Personagem personagem = boxPersonagem.get(idUserLogado);
-                    personagem.setPoderClique(novoValorClique);
-                    personagem.setGold(novoValorGold);
-                    personagem.setGoldPorClique(novoGoldPorClique);
-                    boxPersonagem.put(personagem);
-
+                    //int valorAtualClique = Personagem.danoPersonagemAtual(boxPersonagem,idUserLogado);
+                    //int valorAtualGoldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagem,idUserLogado);
+                    //int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
+                    //int novoValorGold = goldAtual - valorUp;
+                    //int novoGoldPorClique = valorAtualGoldPorClique * 10;
+                    Personagem.setDadosAposClique(boxPersonagem, valorMelhoriaAdiconada,idUserLogado,goldAtual,valorUp);
+                    //Personagem personagem = boxPersonagem.get(idUserLogado);
+                    //personagem.setPoderClique(novoValorClique);
+                    //personagem.setGold(novoValorGold);
+                    //personagem.setGoldPorClique(novoGoldPorClique);
+                    //boxPersonagem.put(personagem);
+                    txt_gold.setText(""+Personagem.goldPersonagemAtual(boxPersonagem,idUserLogado));
 
                     boxUpgrads.remove(upAtual);
                     upgradeListDisponiveis.remove(position);
@@ -100,7 +99,6 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                     Animation anima_texto = new TranslateAnimation(0,0,0,-100);
                     anima_texto.setDuration(1500);
                     txt_info_sem_gold.startAnimation(anima_texto);
-
                 }
             }
         });
@@ -141,7 +139,6 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
         }else if(valor == 4400000) {
             holder.imageUp.setImageResource(R.drawable.forca6);
         }
-
     }
 
     class UpgradsViewHolder extends RecyclerView.ViewHolder {
@@ -149,9 +146,8 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
         Button txtvalor;
         ImageView imageUp;
 
-        public UpgradsViewHolder(View view) {
+        UpgradsViewHolder(View view) {
             super(view);
-
             txtNome = view.findViewById(R.id.Nome_ups);
             txtvalor = view.findViewById(R.id.valor);
             imageUp = view.findViewById(R.id.icon_ups);

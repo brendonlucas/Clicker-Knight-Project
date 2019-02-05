@@ -1,8 +1,8 @@
 package com.example.brendon.sistemadelogin.Models;
 
-import io.objectbox.Box;
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
+import io.objectbox.Box;
 
 @Entity
 public class Upgrade {
@@ -21,6 +21,7 @@ public class Upgrade {
         this.nome = nome;
         this.valor = valor;
         this.melhoria = melhoria;
+
     }
 
     public String getNome() {
@@ -55,4 +56,10 @@ public class Upgrade {
         boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x3",2700000,10));
         boxUpgrads.put(new Upgrade(id,"Força +6: Dano x3",4400000,60));
     }
+
+    public static void novaMelhoria(int id, Box<Upgrade> boxUpgrads, String nome, int valor,int melhoria){
+        boxUpgrads.put(new Upgrade(id,nome,valor,melhoria));
+    }
+
+
 }
