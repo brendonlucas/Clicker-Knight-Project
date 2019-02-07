@@ -81,7 +81,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                     //int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
                     //int novoValorGold = goldAtual - valorUp;
                     //int novoGoldPorClique = valorAtualGoldPorClique * 10;
-                    Personagem.setDadosAposClique(boxPersonagem, valorMelhoriaAdiconada,idUserLogado,goldAtual,valorUp);
+                    Upgrade.setDadosAposMelhoria(boxPersonagem, valorMelhoriaAdiconada,idUserLogado,goldAtual,valorUp);
                     //Personagem personagem = boxPersonagem.get(idUserLogado);
                     //personagem.setPoderClique(novoValorClique);
                     //personagem.setGold(novoValorGold);

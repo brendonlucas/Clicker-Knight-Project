@@ -87,17 +87,4 @@ public class Personagem {
         boxPersonagens.put(personagem);
     }
 
-    public static void setDadosAposClique(Box<Personagem> boxPersonagem, int valorMelhoriaAdiconada, int idUserLogado, int goldAtual,int valorUp) {
-        int valorAtualClique = Personagem.danoPersonagemAtual(boxPersonagem,idUserLogado);
-        int valorAtualGoldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagem,idUserLogado);
-        int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
-        int novoValorGold = goldAtual - valorUp;
-        int novoGoldPorClique = valorAtualGoldPorClique * 10;
-
-        Personagem personagem = boxPersonagem.get(idUserLogado);
-        personagem.setPoderClique(novoValorClique);
-        personagem.setGold(novoValorGold);
-        personagem.setGoldPorClique(novoGoldPorClique);
-        boxPersonagem.put(personagem);
-    }
 }
