@@ -1,5 +1,6 @@
 package com.example.brendon.sistemadelogin.TelasExtras;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.media.MediaPlayer;
 import android.widget.VideoView;
@@ -10,30 +11,27 @@ import android.os.Bundle;
 import android.view.View;
 import android.net.Uri;
 
-import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
-import com.example.brendon.sistemadelogin.dal.App;
 import com.example.brendon.sistemadelogin.R;
 
-import io.objectbox.Box;
 
 public class FinalGameActivity extends AppCompatActivity {
-    Button avancar,finalizar;
     TextView txtAgradecimentos;
+    Button avancar,finalizar;
     VideoView videoFim;
-    Box<UsuarioLogado> boxDadosUserLogado;
     Uri uri;
+    public static String SHARED_PREFERENCES = "SharedPrefs";
+    public final String TEXT = "idUser";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final_game);
 
-        boxDadosUserLogado = ((App)getApplication()).getBoxStore().boxFor(UsuarioLogado.class);
-
-        avancar = findViewById(R.id.botao_avancar);
-        finalizar = findViewById(R.id.botao_finalizar);
         txtAgradecimentos = findViewById(R.id.txt_agradecimentos);
+        finalizar = findViewById(R.id.botao_finalizar);
+        avancar = findViewById(R.id.botao_avancar);
         videoFim = findViewById(R.id.videoFimGame);
+
         String path = "android.resource://" + getPackageName() +"/" +R.raw.videoplayback;
         uri = Uri.parse(path);
         videoFim.setVideoURI(uri);
@@ -48,15 +46,18 @@ public class FinalGameActivity extends AppCompatActivity {
     }
 
     public void avancar(View view) {
-        avancar.setVisibility(View.VISIBLE);
-        finalizar.setVisibility(View.VISIBLE);
         txtAgradecimentos.setVisibility(View.VISIBLE);
+        finalizar.setVisibility(View.VISIBLE);
+        avancar.setVisibility(View.VISIBLE);
     }
 
     public void finalizaGame(View view) {
         Intent intent = new  Intent();
         setResult(RESULT_OK,intent);
-        boxDadosUserLogado.removeAll();
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(TEXT,-1);
+        editor.apply();
         finish();
     }
 }

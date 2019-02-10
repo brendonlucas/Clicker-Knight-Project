@@ -48,9 +48,6 @@ public class CadastroActivity extends AppCompatActivity {
             Personagem.criaPersonagem(boxPersonagens, novaId, nomeUsuario);
             Boss.criaBoss(boxBoss,novaId);
             Upgrade.setUpgrads(novaId, boxUpgrads);
-            //boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,true));
-            //boxPersonagens.put(new Personagem(novaId, nomeUsuario,0,1,1));
-            //boxBoss.put(new Boss(novaId, "Dark knight",1000000000));
             Toast.makeText(this, "Cadastrado com sucesso!" , Toast.LENGTH_LONG).show();
             finish();
 
@@ -58,34 +55,5 @@ public class CadastroActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuario existente!" , Toast.LENGTH_LONG).show();
         }
     }
-/*
-    private void setUpgrads(int id){
-        boxUpgrads.put(new Upgrade(id,"Força +1: Dano x2",100,10));
-        boxUpgrads.put(new Upgrade(id,"Força +2: Dano x2",700,10));
-        boxUpgrads.put(new Upgrade(id,"Destreza +1: Dano x2",1900,10));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 1: Dano x2",3500,10));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 2: Dano x3",10000,10));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 3: Dano x3",25000,10));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 4: Dano x3",43300,3));
-        boxUpgrads.put(new Upgrade(id,"Fortifica Armadura: Dano x2",70000,2));
-        boxUpgrads.put(new Upgrade(id,"Força +3: Dano x2",100000,2));
-        boxUpgrads.put(new Upgrade(id,"Destreza +2: Dano x2",260000,2));
-        boxUpgrads.put(new Upgrade(id,"Força +4: Dano x2",600000,2));
-        boxUpgrads.put(new Upgrade(id,"Força +5: Dano x2",999999,2));
-        boxUpgrads.put(new Upgrade(id,"Espada nivel 5: Dano x3",2700000,10));
-        boxUpgrads.put(new Upgrade(id,"Força +6: Dano x3",4400000,60));
-    }
-
-    public boolean encontrou(String nomeUsuario) {
-        for (int i = 0; i < boxUsuarios.count(); i++) {
-            Usuario userAtual = boxUsuarios.getAll().get(i);
-            String nomeUsuarioAtual = userAtual.getNome();
-            if (nomeUsuario.equals(nomeUsuarioAtual)) {
-                return true;
-            }
-        }
-        return false;
-    }
-*/
 }
 

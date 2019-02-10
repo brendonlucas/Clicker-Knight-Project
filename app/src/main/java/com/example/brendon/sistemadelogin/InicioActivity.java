@@ -1,5 +1,6 @@
 package com.example.brendon.sistemadelogin;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.LinearLayoutManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.animation.TranslateAnimation;
@@ -20,7 +21,6 @@ import android.view.View;
 import com.example.brendon.sistemadelogin.TelasExtras.FinalGameActivity;
 import com.example.brendon.sistemadelogin.Telas_login.LoginActivity;
 import com.example.brendon.sistemadelogin.Adapters.UpgradsAdapter;
-import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.Pops.PopStatus;
@@ -42,7 +42,6 @@ public class InicioActivity extends AppCompatActivity {
     Box<Upgrade>  boxUpgrads;
     Box<Personagem> boxPersonagens;
     Box<Boss> boxBoss;
-    Box<UsuarioLogado> boxDadosUserLogado;
 
     MediaPlayer music_fundo;
     AlertDialog dialog;
@@ -51,19 +50,22 @@ public class InicioActivity extends AppCompatActivity {
     RecyclerView recicleUpgrads;
     Button botaoBook, botaoBau;
     AnimationDrawable animaHero,animeBoss,animaHit, animaBook, animaBau;
+    public static String SHARED_PREFERENCES = "SharedPrefs";
+    public final String TEXT = "idUser";
+    private int idUserLogado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inicio);
-
         boxUsuarios = ((App) getApplication()).getBoxStore().boxFor(Usuario.class);
         boxUpgrads = ((App) getApplication()).getBoxStore().boxFor(Upgrade.class);
         boxPersonagens = ((App) getApplication()).getBoxStore().boxFor(Personagem.class);
         boxBoss = ((App) getApplication()).getBoxStore().boxFor(Boss.class);
-        boxDadosUserLogado = ((App)getApplication()).getBoxStore().boxFor(UsuarioLogado.class);
 
-        if (boxUsuarios.count() == 0 || boxDadosUserLogado.count() == 0) {
+        loadDados();
+
+        if (boxUsuarios.count() == 0 || idUserLogado == -1) {
             Intent intent = new Intent(this, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivityForResult(intent,REQUEST_CODE);
@@ -72,9 +74,13 @@ public class InicioActivity extends AppCompatActivity {
         }
     }
 
-    public void setAtributosAdicionais(){
-        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
+    public void loadDados(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE);
+        idUserLogado = sharedPreferences.getInt(TEXT,-1);
+    }
 
+    public void setAtributosAdicionais(){
+        loadDados();
         music_fundo = MediaPlayer.create(InicioActivity.this, R.raw.song_bg);
         music_fundo.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
@@ -84,7 +90,7 @@ public class InicioActivity extends AppCompatActivity {
         });
         music_fundo.start();
 
-        int vida_boss = Boss.vidaBossAtual(boxBoss,idUserLogado);
+        int vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
         if (vida_boss <= 0){
             finalizaGame();
         }else{
@@ -115,10 +121,9 @@ public class InicioActivity extends AppCompatActivity {
             animeBoss = (AnimationDrawable)image_boss.getBackground();
             animeBoss.start();
 
-            //setUpsDisponiveis();
             setValores();
 
-            UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, boxDadosUserLogado, boxUpgrads, setUpsDisponiveis(),txt_gold);
+            UpgradsAdapter adapter = new UpgradsAdapter(this,txt_info_sem_gold, boxPersonagens, idUserLogado, boxUpgrads, setUpsDisponiveis(),txt_gold);
             recicleUpgrads.setAdapter(adapter);
             recicleUpgrads.setLayoutManager(new LinearLayoutManager(this));
         }
@@ -126,9 +131,8 @@ public class InicioActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void setValores(){
-        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
-        txt_hp_Boss.setText("" + Boss.vidaBossAtual(boxBoss,idUserLogado));
-        txt_gold.setText("" + Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado));
+        txt_hp_Boss.setText("" + Boss.vidaBossAtual(boxBoss, idUserLogado));
+        txt_gold.setText("" + Personagem.goldPersonagemAtual(boxPersonagens, idUserLogado));
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,7 +142,7 @@ public class InicioActivity extends AppCompatActivity {
                 setAtributosAdicionais();
 
             }else{
-                if (boxDadosUserLogado.count() == 0){
+                if (idUserLogado == -1){
                     finish();
                 }
             }
@@ -153,15 +157,10 @@ public class InicioActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void atacar(View view) {
-        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
-        int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado);
-        int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens,idUserLogado);
-        int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens,idUserLogado);
-        int vida_boss = Boss.vidaBossAtual(boxBoss,idUserLogado);
-        //int goldAtualPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getGold();
-        //int danoPersonagem = boxPersonagens.getAll().get(idUserLogado -1).getPoderClique();
-        //int goldPorClique = boxPersonagens.getAll().get(idUserLogado -1).getGoldPorClique();
-        //int vida_boss = boxBoss.getAll().get(idUserLogado -1).getVida();
+        int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens, idUserLogado);
+        int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens, idUserLogado);
+        int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens, idUserLogado);
+        int vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
 
         //0.2% de chance de receber Bonus
         Random geradorNum = new Random();
@@ -181,19 +180,10 @@ public class InicioActivity extends AppCompatActivity {
         image_hit.setBackgroundResource(R.drawable.sequencia_hit);
         animaHit.start();
 
-        int hpBossAposClique = Boss.hpBossAposClique(boxBoss,idUserLogado,danoPersonagem,vida_boss);
-        //int hpBossAposClique = vida_boss - danoPersonagem;
-        //Boss boss = boxBoss.get(idUserLogado);
-        //boss.setVida(hpBossAposClique);
-        //boxBoss.put(boss);
+        int hpBossAposClique = Boss.hpBossAposClique(boxBoss, idUserLogado,danoPersonagem,vida_boss);
+        int goldAposClique = Personagem.goldAposClique(boxPersonagens, idUserLogado,goldAtualPersonagem,goldPorClique);
 
-        int goldAposClique = Personagem.goldAposClique(boxPersonagens,idUserLogado,goldAtualPersonagem,goldPorClique);
-        //int goldAposClique = goldAtualPersonagem + goldPorClique;
-        //Personagem personagem = boxPersonagens.get(idUserLogado);
-        //personagem.setGold(goldAposClique);
-        //boxPersonagens.put(personagem);
-
-        // set informações dos valores de vida e Gold na tela
+        // seta informações dos valores de vida e Gold na tela
         setValores();
         // cria evento de animação de texto
         Animation mover_dano = new TranslateAnimation(0,20,0,-100);
@@ -216,28 +206,13 @@ public class InicioActivity extends AppCompatActivity {
         }
     }
 
-    public void finalizaGame(){
-        music_fundo.stop();
-        Intent intent = new Intent(this, FinalGameActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivityForResult(intent,REQUEST_CODE_END_GAME);
-    }
-
-    public void sairDaConta(View view) {
-        music_fundo.stop();
-        dialog.cancel();
-        boxDadosUserLogado.removeAll();
-        finish();
-    }
-
     // lista os upgrades disponiveis para uma determinada conta logada
     public List<Upgrade> setUpsDisponiveis(){
-        int idUserlogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
         List<Upgrade> listaUpsUserAtual = new ArrayList<>();
         for (int i = 0; i< boxUpgrads.getAll().size(); i++){
             Upgrade upgradeAtual = boxUpgrads.getAll().get(i);
             int idUpgradeAtual = upgradeAtual.getNum_id();
-            if (idUpgradeAtual == idUserlogado){
+            if (idUpgradeAtual == idUserLogado){
                 listaUpsUserAtual.add(upgradeAtual);
             }
         }
@@ -258,26 +233,9 @@ public class InicioActivity extends AppCompatActivity {
         finish();
     }
 
-    @Override
-    public void onBackPressed() {
-        dialog = new AlertDialog.Builder(this).setView(R.layout.card_alert).show();
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void verStatus(View view) {
-        startActivity(new Intent(this,PopStatus.class));
-    }
-
     // ao clicar no icone do bônus esta função é chamada
     public void recebeBonus(View view) {
-        int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
-        //int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens,idUserLogado);
-        //int goldComBonus = goldAtualPersonagem * 2;
-        //Personagem personagem = boxPersonagens.get(idUserLogado);
-        //personagem.setGold(goldComBonus);
-        //boxPersonagens.put(personagem);
-
-        Personagem.setGoldComBonus(boxPersonagens,idUserLogado);
+        Personagem.setGoldComBonus(boxPersonagens, idUserLogado);
         setValores();
         botaoBau.setVisibility(View.INVISIBLE);
         Toast.makeText(this, "Bônus recebido!", Toast.LENGTH_SHORT).show();
@@ -291,8 +249,33 @@ public class InicioActivity extends AppCompatActivity {
         });
         som_bau.start();
     }
+    public void finalizaGame(){
+        music_fundo.stop();
+        Intent intent = new Intent(this, FinalGameActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivityForResult(intent,REQUEST_CODE_END_GAME);
+    }
+
+    public void sairDaConta(View view) {
+        music_fundo.stop();
+        dialog.cancel();
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(TEXT,-1);
+        editor.apply();
+        finish();
+    }
 
     public void ajuda(View view) {
         startActivity(new Intent(this,PopAjuda.class));
+    }
+
+    public void verStatus(View view) {
+        startActivity(new Intent(this,PopStatus.class));
+    }
+
+    @Override
+    public void onBackPressed() {
+        dialog = new AlertDialog.Builder(this).setView(R.layout.card_alert).show();
     }
 }

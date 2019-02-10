@@ -32,22 +32,6 @@
       "relations": []
     },
     {
-      "id": "3:2398704966591594819",
-      "lastPropertyId": "2:5904514956170415781",
-      "name": "UsuarioLogado",
-      "properties": [
-        {
-          "id": "1:786217815778806396",
-          "name": "id"
-        },
-        {
-          "id": "2:5904514956170415781",
-          "name": "nun_id"
-        }
-      ],
-      "relations": []
-    },
-    {
       "id": "4:2789589106411593874",
       "lastPropertyId": "5:1820047670481942058",
       "name": "Upgrade",
@@ -139,7 +123,8 @@
   "modelVersion": 4,
   "modelVersionParserMinimum": 4,
   "retiredEntityUids": [
-    7739550549749987001
+    7739550549749987001,
+    2398704966591594819
   ],
   "retiredIndexUids": [],
   "retiredPropertyUids": [
@@ -151,7 +136,9 @@
     1987723732628282210,
     8696666004738312291,
     4146108619792654915,
-    585010783519078119
+    585010783519078119,
+    786217815778806396,
+    5904514956170415781
   ],
   "retiredRelationUids": [],
   "version": 1

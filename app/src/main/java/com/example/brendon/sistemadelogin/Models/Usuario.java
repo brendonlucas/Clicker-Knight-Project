@@ -22,6 +22,22 @@ public class Usuario {
         this.novoUsuario = novoUsuario;
     }
 
+    public static int retornaIdUsuarioLogado(Box<Usuario> boxUsuarios, String nomeUsuario, String senhaUsuario) {
+        for (int i = 0; i < boxUsuarios.count(); i++) {
+            Usuario usuarioAtual = boxUsuarios.getAll().get(i);
+            String nomeUsuarioAtual = usuarioAtual.getNome();
+            String senhaUsuarioAtual = usuarioAtual.getSenha();
+            int idUsuarioAtual = usuarioAtual.getNun_id();
+
+            if (nomeUsuario.equals(nomeUsuarioAtual)) {
+                if (senhaUsuario.equals(senhaUsuarioAtual)) {
+                    return idUsuarioAtual;
+                }
+            }
+        }
+        return -1;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -57,7 +73,7 @@ public class Usuario {
         boxUsuarios.put(new Usuario(novaId, nomeUsuario, senhaUsuario,true));
     }
 
-    public static boolean logar(Box<Usuario> boxUsuarios, Box<UsuarioLogado> boxDadosUsuariosLogado, String nomeUsuario, String senhaUsuario) {
+    public static boolean logar(Box<Usuario> boxUsuarios, String nomeUsuario, String senhaUsuario) {
         for (int i = 0; i < boxUsuarios.count(); i++) {
             Usuario usuarioAtual = boxUsuarios.getAll().get(i);
             String nomeUsuarioAtual = usuarioAtual.getNome();
@@ -66,7 +82,8 @@ public class Usuario {
 
             if (nomeUsuario.equals(nomeUsuarioAtual)) {
                 if (senhaUsuario.equals(senhaUsuarioAtual)) {
-                    UsuarioLogado.adicionaUsuarioAtual(boxDadosUsuariosLogado, idUsuarioAtual);
+
+                    //UsuarioLogado.adicionaUsuarioAtual(boxDadosUsuariosLogado, idUsuarioAtual);
                     return true;
                 }
             }
@@ -74,14 +91,13 @@ public class Usuario {
         return false;
     }
 
-    public static void setUserNotNew(Box<Usuario> boxUsuarios, Box<UsuarioLogado> boxDadosUsuariosLogado) {
-        int idUsuarioAtual = boxDadosUsuariosLogado.getAll().get(0).getNun_id();
-        Usuario usuario = boxUsuarios.get(idUsuarioAtual);
+    public static void setUserNotNew(Box<Usuario> boxUsuarios,int idUser) {
+        Usuario usuario = boxUsuarios.get(idUser);
         usuario.setNovoUsuario(false);
         boxUsuarios.put(usuario);
     }
 
-    public static boolean verificaSeUsuarioAtualENovo(Box<Usuario> boxUsuarios, Box<UsuarioLogado> boxDadosUsuariosLogado) {
-        return boxUsuarios.getAll().get(UsuarioLogado.retornaIdUserLogado(boxDadosUsuariosLogado) - 1).isNovoUsuario();
+    public static boolean verificaSeUsuarioAtualENovo(Box<Usuario> boxUsuarios, int idUser) {
+        return boxUsuarios.getAll().get(idUser - 1).isNovoUsuario();
     }
 }

@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View;
 
-import com.example.brendon.sistemadelogin.Models.UsuarioLogado;
 import com.example.brendon.sistemadelogin.Models.Personagem;
 import com.example.brendon.sistemadelogin.Models.Upgrade;
 import com.example.brendon.sistemadelogin.R;
@@ -26,15 +25,15 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
     private Context context;
     private Box<Upgrade> boxUpgrads;
     private Box<Personagem> boxPersonagem;
-    private Box<UsuarioLogado> boxDadosUserLogado;
+    private int idUserLogado;
     private List<Upgrade> upgradeListDisponiveis;
     private TextView txt_info_sem_gold;
     private TextView txt_gold;
 
-    public UpgradsAdapter(Context context,TextView txt_info_sem_gold, Box<Personagem> boxPersonagem,Box<UsuarioLogado> boxDadosUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis, TextView txt_gold) {
+    public UpgradsAdapter(Context context,TextView txt_info_sem_gold, Box<Personagem> boxPersonagem,int idUserLogado, Box<Upgrade> boxUpgrads, List<Upgrade> upgradeListDisponiveis, TextView txt_gold) {
         this.boxUpgrads = boxUpgrads;
         this.boxPersonagem = boxPersonagem;
-        this.boxDadosUserLogado = boxDadosUserLogado;
+        this.idUserLogado = idUserLogado;
         this.upgradeListDisponiveis = upgradeListDisponiveis;
         this.txt_info_sem_gold = txt_info_sem_gold;
         this.txt_gold = txt_gold;
@@ -62,8 +61,7 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
         holder.txtvalor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int idUserLogado = UsuarioLogado.retornaIdUserLogado(boxDadosUserLogado);
-                int goldAtual = Personagem.goldPersonagemAtual(boxPersonagem,idUserLogado);
+                int goldAtual = Personagem.goldPersonagemAtual(boxPersonagem, idUserLogado);
                 int valorUp = upAtual.getValor();
 
                 if (goldAtual >= valorUp){
@@ -76,17 +74,9 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
                     });
                     mp.start();
                     int valorMelhoriaAdiconada = upAtual.getMelhoria();
-                    //int valorAtualClique = Personagem.danoPersonagemAtual(boxPersonagem,idUserLogado);
-                    //int valorAtualGoldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagem,idUserLogado);
-                    //int novoValorClique = valorAtualClique * valorMelhoriaAdiconada;
-                    //int novoValorGold = goldAtual - valorUp;
-                    //int novoGoldPorClique = valorAtualGoldPorClique * 10;
+
                     Upgrade.setDadosAposMelhoria(boxPersonagem, valorMelhoriaAdiconada,idUserLogado,goldAtual,valorUp);
-                    //Personagem personagem = boxPersonagem.get(idUserLogado);
-                    //personagem.setPoderClique(novoValorClique);
-                    //personagem.setGold(novoValorGold);
-                    //personagem.setGoldPorClique(novoGoldPorClique);
-                    //boxPersonagem.put(personagem);
+
                     txt_gold.setText(""+Personagem.goldPersonagemAtual(boxPersonagem,idUserLogado));
 
                     boxUpgrads.remove(upAtual);
