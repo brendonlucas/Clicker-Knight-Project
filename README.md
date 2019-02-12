@@ -7,7 +7,9 @@ e eleva o ganho de moedas.
 
 Storyboard:
 https://uploaddeimagens.com.br/images/001/891/724/original/Storyboard.png?1549931524
+
 Diagrama de classe:
 https://docs.google.com/document/d/1gCuOWK-xeQas7U-Dm1bDYRTRNxr2XUO7HHIGt88NyRU/edit?usp=sharing
+
 Funcionalidades e requisitos:
 https://docs.google.com/document/d/1NBH-FY7zjcXj-nh9uQMldQXHJVbt59XFrWQE43rfVjU/edit?usp=sharing
