@@ -51,7 +51,7 @@ public class PopStatus extends Activity {
         String nomepersonagem = boxPersonagens.getAll().get(idUser -1).getNome();
         int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens,idUser);
         int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens,idUser);
-        int vida_do_Boss = Boss.vidaBossAtual(boxBoss,idUser);
+        long vida_do_Boss = Boss.vidaBossAtual(boxBoss,idUser);
         int goldAtual = Personagem.goldPersonagemAtual(boxPersonagens,idUser);
 
         txt_gold_clique.setText("Blood coins por clique: "+ goldPorClique);

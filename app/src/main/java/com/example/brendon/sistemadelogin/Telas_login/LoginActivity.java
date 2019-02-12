@@ -1,6 +1,5 @@
 package com.example.brendon.sistemadelogin.Telas_login;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.media.MediaPlayer;

@@ -78,12 +78,8 @@ public class Usuario {
             Usuario usuarioAtual = boxUsuarios.getAll().get(i);
             String nomeUsuarioAtual = usuarioAtual.getNome();
             String senhaUsuarioAtual = usuarioAtual.getSenha();
-            int idUsuarioAtual = usuarioAtual.getNun_id();
-
             if (nomeUsuario.equals(nomeUsuarioAtual)) {
                 if (senhaUsuario.equals(senhaUsuarioAtual)) {
-
-                    //UsuarioLogado.adicionaUsuarioAtual(boxDadosUsuariosLogado, idUsuarioAtual);
                     return true;
                 }
             }

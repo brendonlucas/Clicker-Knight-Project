@@ -112,21 +112,21 @@ public class UpgradsAdapter extends RecyclerView.Adapter<UpgradsAdapter.UpgradsV
             holder.imageUp.setImageResource(R.drawable.arma2);
         }else if(valor == 25000) {
             holder.imageUp.setImageResource(R.drawable.arma3);
-        }else if(valor == 43300) {
+        }else if(valor == 700000) {
             holder.imageUp.setImageResource(R.drawable.arma4);
-        }else if(valor == 70000) {
+        }else if(valor == 2000000) {
             holder.imageUp.setImageResource(R.drawable.forca1);
-        }else if(valor == 100000) {
+        }else if(valor == 18000000) {
             holder.imageUp.setImageResource(R.drawable.forca3);
-        }else if(valor == 260000) {
+        }else if(valor == 37000000) {
             holder.imageUp.setImageResource(R.drawable.forca4);
-        }else if(valor == 600000) {
+        }else if(valor == 90000000) {
             holder.imageUp.setImageResource(R.drawable.forca4);
-        }else if(valor == 999999) {
+        }else if(valor == 200000000) {
             holder.imageUp.setImageResource(R.drawable.forca5);
-        }else if(valor == 2700000) {
+        }else if(valor == 600000000) {
             holder.imageUp.setImageResource(R.drawable.arma5);
-        }else if(valor == 4400000) {
+        }else if(valor == 1000000000) {
             holder.imageUp.setImageResource(R.drawable.forca6);
         }
     }

@@ -90,7 +90,7 @@ public class InicioActivity extends AppCompatActivity {
         });
         music_fundo.start();
 
-        int vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
+        long vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
         if (vida_boss <= 0){
             finalizaGame();
         }else{
@@ -160,7 +160,7 @@ public class InicioActivity extends AppCompatActivity {
         int goldAtualPersonagem = Personagem.goldPersonagemAtual(boxPersonagens, idUserLogado);
         int danoPersonagem = Personagem.danoPersonagemAtual(boxPersonagens, idUserLogado);
         int goldPorClique = Personagem.goldCliquePersonagemAtual(boxPersonagens, idUserLogado);
-        int vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
+        long vida_boss = Boss.vidaBossAtual(boxBoss, idUserLogado);
 
         //0.2% de chance de receber Bonus
         Random geradorNum = new Random();
@@ -180,7 +180,7 @@ public class InicioActivity extends AppCompatActivity {
         image_hit.setBackgroundResource(R.drawable.sequencia_hit);
         animaHit.start();
 
-        int hpBossAposClique = Boss.hpBossAposClique(boxBoss, idUserLogado,danoPersonagem,vida_boss);
+        long hpBossAposClique = Boss.hpBossAposClique(boxBoss, idUserLogado,danoPersonagem,vida_boss);
         int goldAposClique = Personagem.goldAposClique(boxPersonagens, idUserLogado,goldAtualPersonagem,goldPorClique);
 
         // seta informações dos valores de vida e Gold na tela
@@ -249,6 +249,7 @@ public class InicioActivity extends AppCompatActivity {
         });
         som_bau.start();
     }
+
     public void finalizaGame(){
         music_fundo.stop();
         Intent intent = new Intent(this, FinalGameActivity.class);
